@@ -2,7 +2,7 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './src/**/*.{ts,tsx}',
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
 	],
   theme: {
     container: {
@@ -14,7 +14,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        "sans": "var(--font-epilogue)"
+        sans: ['var(--epilogue-font)'],
       },
       animation: {
         scroll: 'scroll 40s linear infinite',

@@ -1,10 +1,11 @@
 import "@/styles/globals.css";
-import { useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import type { AppProps } from "next/app";
 import localFont from "next/font/local";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { ClerkProvider } from "@clerk/nextjs";
+import { NextPage } from "next";
 
 const epilogue = localFont({
   src: [
@@ -27,13 +28,21 @@ const epilogue = localFont({
   variable: "--font-epilogue",
 });
 
-function App({ Component, pageProps }: AppProps) {
-  return (
-    <ClerkProvider {...pageProps}>
-      <main className={`${epilogue.variable} font-sans`}>
-        <Component {...pageProps} />
-      </main>
-    </ClerkProvider>
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+function App({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page);
+
+  return getLayout(
+    <main className={`${epilogue.variable} font-sans`}>
+      <Component {...pageProps} />
+    </main>
   );
 }
 
@@ -41,11 +50,20 @@ export default function AppWrapper(props: AppProps) {
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
 
   return (
-    <SessionContextProvider
-      supabaseClient={supabaseClient}
-      initialSession={props.pageProps.initialSession}
-    >
-      <App {...props} />
-    </SessionContextProvider>
+    <>
+      <style jsx global>{`
+        :root {
+          --epilogue-font: ${epilogue.style.fontFamily};
+        }
+      `}</style>
+      <SessionContextProvider
+        supabaseClient={supabaseClient}
+        initialSession={props.pageProps.initialSession}
+      >
+        <ClerkProvider {...props}>
+          <App {...props} />
+        </ClerkProvider>
+      </SessionContextProvider>
+    </>
   );
 }
