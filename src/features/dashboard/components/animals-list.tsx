@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function AnimalsList() {
-  function classNames(...classes) {
+  function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
   }
 

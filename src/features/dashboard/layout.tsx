@@ -2,7 +2,11 @@ import React from "react";
 import { useClerk } from "@clerk/clerk-react";
 import SideBarNav from "./components/side-bar-nav";
 
-export default function Layout({ children }) {
+interface Props {
+  children: React.ReactNode;
+}
+
+export default function Layout({ children }: Props) {
   const { signOut } = useClerk();
   return (
     <>

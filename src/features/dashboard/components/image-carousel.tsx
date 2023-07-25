@@ -1,29 +1,8 @@
 import { createClient } from "pexels";
 import React, { useEffect } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-const client = createClient(
-  "khlQE5YQphLdh5IcAp8NhOjV0FnsVzheAxlGshojU9HXqBt0Nc7MI3tG"
-);
-const query = "pet cat";
 
 export default function ImageCarousel() {
-  const [videos, setVideos] = React.useState([]);
-
-  const queryForVideos = () => {
-    client.videos
-      .search({ query, per_page: 15, orientation: "portrait" })
-      .then((videos) => {
-        const links = videos.videos
-          .reverse()
-          .map((video) => video.video_files[0].link);
-        console.log("links", links);
-        setVideos(links);
-      });
-  };
-
-  useEffect(() => {
-    queryForVideos();
-  }, []);
   return (
     <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
       <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
