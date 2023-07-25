@@ -76,13 +76,14 @@ export default function ChatCanvas() {
       {output && (
         <div className="flex flex-col relative">
           {inflight && (
-            <div className="inline-flex space-x-2 items-ce           <Image
+            <div className="inline-flex space-x-2 items-center">
+              <Image
                 className="w-6 animate-pulse"
                 priority
                 src={Logo}
                 alt="Animai is thinking..."
               />
-              <p className="text-slate-400 text-xs mt-1">
+              <p className="text-slate-500 text-xs mt-1 animate pulse">
                 Animai is talking...
               </p>
             </div>
