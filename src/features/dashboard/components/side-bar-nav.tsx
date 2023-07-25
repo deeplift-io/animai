@@ -30,7 +30,7 @@ const teams = [
 
 export default function SideBarNav() {
   return (
-    <div className="flex grow flex-col gap-y-5 overflow-y-auto h-screen px-6 pb-12">
+    <div className="absolute flex grow flex-col gap-y-5 overflow-y-auto h-screen px-6 pb-12">
       <nav className="flex flex-1 flex-col">
         <div className="flex flex-1 flex-col gap-y-7 justify-end h-full">
           <AnimalsList />

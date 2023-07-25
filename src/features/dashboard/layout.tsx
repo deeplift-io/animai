@@ -8,7 +8,7 @@ export default function Layout({ children }) {
     <>
       <div className="absolute top-0 w-full">
         <div className="w-full py-3 px-4 justify-between inline-flex items-center font-sans">
-          <div className="font-sans text-xl">Animai</div>
+          <div className="text-xl">Animai</div>
           <div className="inline-flex items-center space-x-2">
             <div>
               <button className="font-sans text-sm" onClick={() => signOut()}>
@@ -18,9 +18,9 @@ export default function Layout({ children }) {
           </div>
         </div>
       </div>
-      <main className="inline-flex">
+      <main className="inline-flex w-full">
+        <div className="pt-32 w-full">{children}</div>
         <SideBarNav />
-        <div className="pt-32">{children}</div>
       </main>
     </>
   );

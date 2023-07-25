@@ -11,9 +11,7 @@ export default function AnimalsList() {
   ];
   return (
     <div>
-      <div className="text-xs font-medium leading-6 text-gray-700">
-        🐶 Your animals
-      </div>
+      <div className="leading-6 text-gray-900">🐶 Your animals</div>
       <ul role="list" className="-mx-2 mt-2 space-y-1">
         {animals.map((team) => (
           <li key={team.name}>
@@ -22,7 +20,7 @@ export default function AnimalsList() {
               className={classNames(
                 team.current
                   ? "bg-gray-50 text-indigo-600"
-                  : "text-gray-700 hover:text-indigo-600",
+                  : "text-gray-600 hover:text-indigo-600",
                 "group flex gap-x-3 rounded-md p-2 text-sm leading-6"
               )}
             >
