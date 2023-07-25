@@ -1,7 +1,7 @@
 import { SignUp } from "@clerk/nextjs";
 import Spline from "@splinetool/react-spline";
 
-export default function Page() {
+export default function SignUpPage() {
   return (
     <div className="w-screen h-screen inline-flex items-center justify-center">
       <Spline
