@@ -64,8 +64,8 @@ export default function Example() {
                     veterinarian virtuoso
                   </h1>
                   <p className="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
-                    We've taken the collective intelligence of hundreds of vets
-                    with years of veterinary experience and put it in your
+                    We have taken the collective intelligence of hundreds of
+                    vets with years of veterinary experience and put it in your
                     pocket.
                   </p>
                 </div>
