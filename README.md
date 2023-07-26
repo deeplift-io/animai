@@ -1,10 +1,7 @@
-# supabase-template
+# Get started with Animai
 
-## Get started
 0. Make sure you have [Docker](https://www.docker.com/) installed and running
-
 1. Clone this repo
-
 2. Install dependencies, including the Supabase CLI
 
 ```bash
@@ -26,7 +23,6 @@ echo "OPENAI_API_KEY=sk-xxx" > supabase/.env
 ```
 
 5. If not already running, start Docker. Learn how to do this for your OS [here](https://docs.docker.com/desktop/).
-
 6. Start the supabase project.
 
 ```bash
@@ -50,11 +46,8 @@ yarn dev
 ## Deploy
 
 1. Create a new project on [Supabase](https://supabase.io)
-
 2. Create a new project on [Vercel](https://vercel.com)
-
 3. To deploy the frontend, connect your Vercel project to your GitHub repo and push to main.
-
 4. To deploy the supabase functions, first login to Supabase:
 
 ```bash
