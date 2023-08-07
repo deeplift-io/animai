@@ -2,9 +2,16 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
 	],
   theme: {
+    fontFamily: {
+      logo: "var(--font-space-grotesk)",
+      sans: "var(--font-outfit)",
+    },
     container: {
       center: true,
       padding: "2rem",
@@ -13,18 +20,6 @@ module.exports = {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ['var(--epilogue-font)'],
-      },
-      animation: {
-        scroll: 'scroll 40s linear infinite',
-      },
-      keyframes: {
-        scroll: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(calc(-250px * 15))' },
-        },
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
