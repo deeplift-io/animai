@@ -1,4 +1,4 @@
-import { Database as DB } from "./lib/supabase";
+import { Database as DB } from "./src/lib/supabase";
 
 declare global {
     type Database = DB;
