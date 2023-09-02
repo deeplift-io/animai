@@ -15,7 +15,7 @@ export default function SignInForm() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: "http://localhost:3100/auth/callback",
+        redirectTo: `${process.env.NEXT_PUBLIC_HOST}/auth/callback`,
       },
     });
     setLoading(false);
