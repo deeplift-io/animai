@@ -48,7 +48,7 @@ export default function Home() {
               <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
                 <div className="w-full max-w-md lg:shrink-0 xl:max-w-xl">
                   <div className="rounded-full border border-slate-900 inline-block px-2 mb-4">
-                    We're in Beta
+                    We&apos;re in Beta
                   </div>
                   <motion.div
                     initial={{ opacity: 0 }}

@@ -61,7 +61,7 @@ const AnimalAvatar = ({ animal }: { animal: AnimalWithProfile }) => {
 const EmptyAnimalSelector = () => {
   return (
     <div className="w-full flex flex-col items-center justify-between cursor-pointer hover:opacity-90">
-      <Text className="text-xs">Add your animal</Text>
+      <div className="text-xs">Add your animal</div>
     </div>
   );
 };
