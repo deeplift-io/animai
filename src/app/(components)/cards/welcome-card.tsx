@@ -31,6 +31,7 @@ const WelcomeCard = () => {
     };
 
     fetchUserProfile();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!userProfile) {
@@ -52,7 +53,7 @@ const WelcomeCard = () => {
       </div>
       <p className="text-gray-600 text-sm">Welcome {userProfile?.name}</p>
       <p className="text-lg font-medium text-gray-700">
-        To get started, let's add your first pet.
+        To get started, let&apos;s add your first pet.
       </p>
       </div>
       <div className="w-full rounded-b border-t cursor-pointer hover:bg-gradient-to-br from-fuchsia-50 via-purple-50 to-indigo-50">
