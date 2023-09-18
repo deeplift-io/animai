@@ -20,11 +20,11 @@ export default function AddAnimalForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-    <Label htmlFor="picture" className="text-left">Your animal's name</Label>
+    <Label htmlFor="picture" className="text-left">Your animal&apos;s name</Label>
       <Input {...register("name")} />
       <p className="text-sm text-rose-500">{errors.name?.message}</p>
         <div className="py-2" />
-        <Label htmlFor="picture" className="text-left">Your animal's age</Label>
+        <Label htmlFor="picture" className="text-left">Your animal&apos;s age</Label>
       <Input type="number" pattern="\d*" {...register("age")} />
       <p className="text-sm text-rose-500">{errors.age?.message}</p>
       <div className="py-2" /> 
