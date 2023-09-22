@@ -127,11 +127,6 @@ const AddAnimalStage = ({ userProfile }: { userProfile: any }) => {
         <CardContent>
           <AddAnimalForm />
         </CardContent>
-        <CardFooter>
-          <Button className="w-full bg-gradient-to-br from-green-700 via-emerald-600 to-green-700 border border-green-700">
-            Add my animal
-          </Button>
-        </CardFooter>
       </Card>
     </motion.div>
   );
