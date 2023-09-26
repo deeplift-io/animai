@@ -2,6 +2,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import MainNav from "../(components)/main-nav";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Toaster } from 'react-hot-toast';
 
 export default async function DashboardLayout({
   children, // will be a page or nested layout
@@ -27,6 +28,7 @@ export default async function DashboardLayout({
         <MainNav />
         <div className="pt-24">{children}</div>
       </div>
+      <Toaster />
     </main>
   );
 }

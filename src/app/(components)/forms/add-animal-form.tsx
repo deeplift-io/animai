@@ -6,7 +6,9 @@ import { Label } from "@/components/ui/label";
 import { AnimalTypeSelector } from "../animal-type-selector";
 import { Button } from "@/components/ui/button";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import ImageUpload from "@/components/ui/image-upload";
 
 const schema = yup
   .object({
@@ -25,7 +27,11 @@ const schema = yup
   .required();
 type FormData = yup.InferType<typeof schema>;
 
-export default function AddAnimalForm() {
+export default function AddAnimalForm({
+  onSuccess,
+}: {
+  onSuccess: () => void;
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const supabase = createClientComponentClient();
   const {
@@ -33,11 +39,12 @@ export default function AddAnimalForm() {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
-    getValues,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+
   const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -54,17 +61,26 @@ export default function AddAnimalForm() {
       ])
       .single();
     setIsLoading(false);
+
+    if (error) {
+      toast.error('There was an error adding your animal.');
+      return;
+    }
+
+    toast.success('Your animal was added!');
+    onSuccess();
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Label htmlFor="picture" className="text-left">
+      <ImageUpload />
+      <Label htmlFor="name" className="text-left">
         Your animal&apos;s name
       </Label>
       <Input {...register("name")} />
       <p className="text-sm text-rose-500">{errors.name?.message}</p>
       <div className="py-2" />
-      <Label htmlFor="picture" className="text-left">
+      <Label htmlFor="age" className="text-left">
         Your animal&apos;s age (in human years)
       </Label>
       <Input type="number" pattern="\d*" {...register("age")} />
@@ -72,15 +88,20 @@ export default function AddAnimalForm() {
       <div className="py-2" />
       <AnimalTypeSelector
         {...register("type")}
-        onValueChange={(value) => setValue("type", value)}
+        onValueChange={(value) =>
+          setValue("type", value, {
+            shouldValidate: true,
+            shouldDirty: true,
+          })
+        }
       />
       <p className="text-sm text-rose-500">{errors.type?.message}</p>
       <div className="py-4"></div>
       <Button
-        disabled={!isValid || isLoading}
+        disabled={!isValid}
         isLoading={isLoading}
         type="submit"
-        className="w-full bg-gradient-to-br from-green-700 via-emerald-600 to-green-700 border border-green-700"
+        variant="special"
       >
         Add my animal
       </Button>

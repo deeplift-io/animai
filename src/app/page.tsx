@@ -1,11 +1,18 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRightIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="h-screen">
-      <header className="absolute inset-x-0 top-0 z-50">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, translateY: 10 }}
+        transition={{ duration: 1, delay: 2 }}
+        className="absolute inset-x-0 top-0 z-50"
+      >
         <nav
           className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
           aria-label="Global"
@@ -26,9 +33,13 @@ export default function Home() {
               <span className="sr-only">Open main menu</span>
             </button>
           </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end"></div>
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            <Link href="/sign-in">
+              <Button variant="link">Sign In</Button>
+            </Link>
+          </div>
         </nav>
-      </header>
+      </motion.div>
       <main className="overflow-hidden h-screen">
         <div className="relative isolate">
           <div
@@ -47,13 +58,18 @@ export default function Home() {
             <div className="mx-auto max-w-7xl px-6 pt-36 sm:pt-60 lg:px-8 lg:pt-24">
               <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
                 <div className="w-full max-w-md lg:shrink-0 xl:max-w-xl">
-                  <div className="rounded-full border border-slate-900 inline-block px-2 mb-4">
-                    We&apos;re in Beta
-                  </div>
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1.3, delay: 3 }}
+                    transition={{ duration: 1, delay: 2.8 }}
+                    className="rounded-full border border-slate-900 inline-block px-2 mb-4"
+                  >
+                    We&apos;re in Beta
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1.3, delay: 2 }}
                     className="text-4xl text-slate-700 sm:text-7xl tracking-tight"
                   >
                     Your{" "}
@@ -65,21 +81,26 @@ export default function Home() {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1.3, delay: 3.5 }}
+                    transition={{ duration: 1.3, delay: 2.5 }}
                     className="relative mt-6 text-2xl text-gray-600 sm:max-w-md lg:max-w-none"
                   >
                     We have taken the collective intelligence of hundreds of
                     vets with years of veterinary experience and put it in your
                     pocket.
                   </motion.div>
-                  <div className="mt-6 space-x-2 text-xl inline-flex items-center cursor-pointer">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1.2, delay: 2.2 }}
+                    className="mt-6 space-x-2 text-xl inline-flex items-center cursor-pointer"
+                  >
                     <div className="border-b hover:border-black transition-all duration-300">
                       Add me to the waitlist
                     </div>
                     <div>
                       <ArrowRightIcon className="w-5" />
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
                 <ImageCarousel />
               </div>
@@ -100,7 +121,7 @@ const ImageCarousel = () => {
         transition={{ duration: 1, delay: 2 }}
         className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80"
       >
-        <div className="relative">
+        <motion.div className="relative">
           <video
             src="https://player.vimeo.com/external/512991476.hd.mp4?s=f0fd74ca4e9f1cec4301a339d658e3e8ea8a9627&profile_id=172&oauth2_token_id=57447761"
             autoPlay
@@ -109,7 +130,7 @@ const ImageCarousel = () => {
             className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
           />
           <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-        </div>
+        </motion.div>
       </motion.div>
       <motion.div
         initial={{ opacity: 0 }}
@@ -117,7 +138,12 @@ const ImageCarousel = () => {
         transition={{ duration: 1.3, delay: 2.5 }}
         className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36"
       >
-        <div className="relative">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.6, delay: 2.3 }}
+          className="relative"
+        >
           <video
             src="https://player.vimeo.com/external/542105396.hd.mp4?s=94e653a2f543776f466a46fb2d691dbf588f7d46&profile_id=174&oauth2_token_id=57447761"
             autoPlay
@@ -126,8 +152,13 @@ const ImageCarousel = () => {
             className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
           />
           <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-        </div>
-        <div className="relative">
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.6, delay: 3.5 }}
+          className="relative"
+        >
           <video
             src="https://player.vimeo.com/external/513851034.hd.mp4?s=6cffa3280578d4274e29aa5ffb9800261ae2f226&profile_id=170&oauth2_token_id=57447761"
             autoPlay
@@ -136,7 +167,7 @@ const ImageCarousel = () => {
             className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
           />
           <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-        </div>
+        </motion.div>
       </motion.div>
       <motion.div
         initial={{ opacity: 0 }}
@@ -144,7 +175,12 @@ const ImageCarousel = () => {
         transition={{ duration: 1.6, delay: 3 }}
         className="w-44 flex-none space-y-8 pt-32 sm:pt-0"
       >
-        <div className="relative">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.6, delay: 3.2 }}
+          className="relative"
+        >
           <video
             src="https://player.vimeo.com/external/565800266.hd.mp4?s=7786dd6ef873a0208196fcfe22ba075605870001&profile_id=170&oauth2_token_id=57447761"
             autoPlay
@@ -153,8 +189,13 @@ const ImageCarousel = () => {
             className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
           />
           <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-        </div>
-        <div className="relative">
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.6, delay: 2.4 }}
+          className="relative"
+        >
           <video
             src="https://player.vimeo.com/external/534342239.sd.mp4?s=be3760b678776981e240954397696c86c7cff5a9&profile_id=165&oauth2_token_id=57447761"
             autoPlay
@@ -163,7 +204,7 @@ const ImageCarousel = () => {
             className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
           />
           <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );
