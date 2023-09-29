@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import ImageUpload from "@/components/ui/image-upload";
+import FileUploadButton from "@/components/ui/file-upload";
 
 const schema = yup
   .object({
@@ -67,13 +67,11 @@ export default function AddAnimalForm({
       return;
     }
 
-    toast.success('Your animal was added!');
     onSuccess();
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <ImageUpload />
       <Label htmlFor="name" className="text-left">
         Your animal&apos;s name
       </Label>

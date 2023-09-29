@@ -14,11 +14,14 @@ import { cn } from "@/src/lib/utils/tailwind";
 import AddAnimalForm from "../forms/add-animal-form";
 import { AnimalPromptForm } from "../forms/animal-prompt-form";
 import AnimalProfileCard from "./animal-profile-card";
+import { useRouter } from "next/navigation";
 
-const OnboardingCard = () => {
+const OnboardingCard = ({ onComplete }: {onComplete: () => void}) => {
   const supabase = createClientComponentClient();
   const [userProfile, setUserProfile] = React.useState(null);
-  const [onboardingStage, setOnboardingStage] = React.useState(1);
+  const [onboardingStage, setOnboardingStage] = React.useState(0);
+  const router = useRouter()
+
 
   React.useEffect(() => {
     const fetchUserProfile = async () => {
@@ -41,6 +44,18 @@ const OnboardingCard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const updateOnboardedAt = async () => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ onboarded_at: new Date().toISOString() })
+      .eq('id', userProfile?.id);
+    if (error) {
+      console.error('Error updating onboarded_at: ', error);
+    } else {
+      onComplete();
+    }
+  };
+
   if (!userProfile) {
     return null;
   }
@@ -48,7 +63,7 @@ const OnboardingCard = () => {
   return (
     <div className="relative w-full flex flex-row justify-center">
       {onboardingStage >= 0 && (
-        <div className="absolute">
+        <div className={`absolute ${onboardingStage !== 0 && "blur-sm"}`}>
           <WelcomeStage
             onContinue={() => setOnboardingStage(1)}
             userProfile={userProfile}
@@ -56,7 +71,7 @@ const OnboardingCard = () => {
         </div>
       )}
       {onboardingStage >= 1 && (
-        <div className="absolute top-5">
+        <div className={`absolute top-5 ${onboardingStage !== 1 && "blur-sm"}`}>
           <AddAnimalStage
             userProfile={userProfile}
             onContinue={() => setOnboardingStage(2)}
@@ -64,18 +79,23 @@ const OnboardingCard = () => {
         </div>
       )}
       {onboardingStage >= 2 && (
-        <div className="absolute top-10">
+        <div className={`absolute top-10 ${onboardingStage !== 2 && "blur-sm"}`}>
           <AnimalPromptStage
             userProfile={userProfile}
-            onContinue={() => setOnboardingStage(3)}
+            onContinue={() => {
+              setOnboardingStage(3);
+            }}
           />
         </div>
       )}
-      {onboardingStage >= 4 && (
-        <div className="absolute top-16">
+      {onboardingStage >= 3 && (
+        <div className={`absolute top-16 ${onboardingStage !== 3 && "blur-sm"}`}>
           <AnimalConfirmationStage
             userProfile={userProfile}
-            onContinue={() => console.log('completed')}
+            onContinue={() => 
+              updateOnboardedAt()
+            }
+            onAddAnother={() => setOnboardingStage(1)}
           />
         </div>
       )}
@@ -202,7 +222,7 @@ const AnimalPromptStage = ({
           <div className="text-sm text-gray-500">
             In just a few sentences, give us a brief description of your animal.
             Feel free to include any information you think is relevant,
-            including any medical conditions, allergies, or behavioural issues.
+            including any chronic medical conditions, allergies, or behavioural issues.
           </div>
         </CardHeader>
         <CardContent>
@@ -216,9 +236,11 @@ const AnimalPromptStage = ({
 const AnimalConfirmationStage = ({
   userProfile,
   onContinue,
+  onAddAnother,
 }: {
   userProfile: any;
   onContinue: () => void;
+  onAddAnother: () => void;
 }) => {
   return (
     <motion.div
@@ -243,7 +265,7 @@ const AnimalConfirmationStage = ({
           <div className="my-4"></div>
           <div className="inline-flex w-full space-x-2">
             <Button onClick={onContinue} variant="special">Continue</Button>
-            <Button onClick={onContinue} variant="secondary" className="w-full">Add another</Button>
+            <Button onClick={onAddAnother} variant="secondary" className="w-full">Add another</Button>
           </div>
         </CardContent>
       </Card>
