@@ -37,12 +37,15 @@ export default function Page() {
     return null;
   }
 
-  console.log(userProfile);
-
   return (
-    <main className="px-6">
+    <main className="w-full">
       {userProfile?.onboarded_at ? (
-        <ChatCanvas />
+        <>
+        {/* <div className="text-2xl">Welcome {userProfile.name}, </div> */}
+        <div className="h-full">
+          <ChatCanvas />
+        </div>
+        </>
       ) : (
         <OnboardingCard onComplete={() => setOnboardingComplete(true)} />
       )}

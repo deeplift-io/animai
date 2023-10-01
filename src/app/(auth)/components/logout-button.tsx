@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -13,11 +14,11 @@ export default function LogoutButton() {
   };
 
   return (
-    <button
+    <Button
+      variant="ghost"
       onClick={handleLogout}
-      className="hover:text-slate-950 text-slate-900"
     >
       Logout
-    </button>
+    </Button>
   );
 }
