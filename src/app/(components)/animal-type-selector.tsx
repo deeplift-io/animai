@@ -227,7 +227,7 @@ export function AnimalTypeSelector({
           </div>
         </Button>
       </DialogTrigger>
-      <DialogContent className={"lg:max-w-screen-lg overflow-y-scroll max-h-screen"}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Select your animal type</DialogTitle>
           <DialogDescription>
@@ -253,6 +253,7 @@ const AnimalsGrid = ({
   const [selectedBreed, setSelectedBreed] = React.useState(null);
   const [selectedAnimalType, setSelectedAnimalType] = React.useState(null);
   const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchTerm, setSearchTerm] = React.useState("");
   const itemsPerPage = 10; // Change this to the number of items you want per page
 
   const getSelectedBreeds = React.useMemo(() => {
@@ -268,9 +269,10 @@ const AnimalsGrid = ({
     });
   }
     const breeds = selectedAnimal ? selectedAnimal.breeds : [];
+    const filteredBreeds = breeds.filter(breed => breed.toLowerCase().includes(searchTerm.toLowerCase())); // Add this line
     const startIndex = (currentPage - 1) * itemsPerPage;
-    return breeds.slice(startIndex, startIndex + itemsPerPage);
-  }, [selectedBreed, currentPage]);
+    return filteredBreeds.slice(startIndex, startIndex + itemsPerPage); // Change this line
+  }, [selectedBreed, currentPage, searchTerm]); // Add searchTerm to the dependency array
 
   if (selectedBreed) {
     return (
@@ -280,7 +282,7 @@ const AnimalsGrid = ({
           <div>{selectedAnimalType?.label}</div>
         </div>
         <div className="flex">
-          <Input Icon={MagnifyingGlassIcon}/>
+          <Input onChange={(event) => setSearchTerm(event.target.value)} Icon={MagnifyingGlassIcon}/>
         </div>
         <ul
           role="list"
