@@ -12,7 +12,6 @@ const UserMenu = () => {
         const {
             data: { session },
           } = await supabase.auth.getSession()
-          console.log(session);
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
