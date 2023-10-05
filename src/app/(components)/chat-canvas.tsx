@@ -47,7 +47,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-screen pt-16 justify-between">
+    <div className="flex flex-col h-screen justify-between">
       <div className="flex overflow-hidden w-full">
         <div className="flex flex-col overflow-hidden w-full">
           <ScrollToBottom className="flex flex-col text-sm dark:bg-gray-800 overflow-scroll no-scrollbar">
