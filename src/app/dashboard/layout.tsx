@@ -22,7 +22,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <main className="font-sans w-full mb-24 overflow-hidden">
+    <main className="font-sans h-screen w-full mb-24 overflow-hidden">
       <div className="mx-auto">
         <GradientBackground />
         <MainNav />
