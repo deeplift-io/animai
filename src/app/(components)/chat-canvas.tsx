@@ -49,7 +49,7 @@ export default function Chat() {
   return (
     <div className="flex h-full">
       <div className="flex overflow-hidden w-full">
-        <div className="flex flex-col h-screen overflow-hidden w-full pb-52">
+        <div className="flex flex-col h-screen overflow-hidden w-full">
           <ScrollToBottom className="flex flex-col text-sm dark:bg-gray-800 overflow-scroll h-full no-scrollbar">
             {messages.map((message) => (
               <ConversationMessage key={message.id} message={message} profile={profile} />
