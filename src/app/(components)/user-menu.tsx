@@ -32,7 +32,7 @@ const UserMenu = () => {
     <Avatar>
         <AvatarImage src={profile?.avatar_url} />
         <AvatarFallback>
-            <div className="uppercase">{profile?.name.substring(0, 2)}</div>
+            <div className="uppercase">{profile?.name?.substring(0, 2)}</div>
         </AvatarFallback>
     </Avatar>
   );
