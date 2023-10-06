@@ -24,7 +24,7 @@ export default function RootLayout({
       className={`${outfit.variable} ${spaceGrotesk.variable} font-light`}
     >
       <body
-        className={`${spaceGrotesk.variable} ${outfit.variable} bg-gradient-to-b from-slate-50 to-gray-100 overflow-hidden`}
+        className={`${spaceGrotesk.variable} ${outfit.variable}`}
       >
         {children}
       </body>

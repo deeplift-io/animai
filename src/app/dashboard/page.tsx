@@ -38,11 +38,11 @@ export default function Page() {
   }
 
   return (
-    <main className="w-full">
+    <div>
       {userProfile?.onboarded_at ? (
         <>
         {/* <div className="text-2xl">Welcome {userProfile.name}, </div> */}
-        <div className="h-full">
+        <div>
           <ChatCanvas />
         </div>
         </>
@@ -50,6 +50,6 @@ export default function Page() {
         <OnboardingCard onComplete={() => setOnboardingComplete(true)} />
       )}
       {/* <AnimalMenu /> */}
-    </main>
+    </div>
   );
 }

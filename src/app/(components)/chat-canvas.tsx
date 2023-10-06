@@ -8,14 +8,20 @@ import { useChat } from "ai/react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ScrollToBottom from 'react-scroll-to-bottom';
+import ScrollToBottom from "react-scroll-to-bottom";
 
 export default function Chat() {
   const [animals, setAnimals] = useState([]);
   const [profile, setProfile] = useState(null);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
-  const { messages, input, handleInputChange, handleSubmit, isLoading, complete } =
-    useChat({ initialInput: selectedAnimal?.seed_prompt });
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+    complete,
+  } = useChat({ initialInput: selectedAnimal?.seed_prompt });
   const supabase = createClientComponentClient();
   useEffect(() => {
     const fetchAnimalProfile = async () => {
@@ -27,7 +33,7 @@ export default function Chat() {
         .select("*") //columns to select from the database
         .eq("id", user?.id)
         .single();
-        
+
       const { data: animals, error: latestAnimalError } = await supabase
         .from("animals") //table name
         .select("*") //columns to select from the database
@@ -52,7 +58,11 @@ export default function Chat() {
         <div className="flex flex-col h-screen overflow-hidden w-full">
           <ScrollToBottom className="flex flex-col text-sm dark:bg-gray-800 overflow-scroll h-full no-scrollbar">
             {messages.map((message) => (
-              <ConversationMessage key={message.id} message={message} profile={profile} />
+              <ConversationMessage
+                key={message.id}
+                message={message}
+                profile={profile}
+              />
             ))}
             {messages.length === 0 && (
               <motion.div
@@ -60,11 +70,10 @@ export default function Chat() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
                 exit={{ opacity: 0 }}
-               className="flex flex-col items-center h-full">
+                className="flex flex-col items-center h-full"
+              >
                 <div className="flex flex-col items-center justify-center h-full">
-                  <div className="text-2xl text-slate-500">
-                    No messages yet
-                  </div>
+                  <div className="text-2xl text-slate-500">No messages yet</div>
                   <div className="text-sm text-slate-400">
                     Select an animal to talk about or ask any question you like
                   </div>
@@ -116,9 +125,10 @@ export default function Chat() {
         >
           <div className="relative flex h-full flex-1 items-stretch md:flex-col">
             <div className="flex w-full items-center flex-col">
-              <div className="flex flex-col w-full flex-grow relative border border-black/10 gizmo:dark:border-gray-100/10 dark:border-gray-900/50 dark:text-white rounded-xl gizmo:rounded-2xl shadow-xs dark:shadow-xs dark:bg-gray-700 bg-white gizmo:bg-[#F5F5F5] gizmo:shadow-[0_0_0_2px_rgba(255,255,255,0.95)] gizmo:dark:shadow-[0_0_0_2px_rgba(52,53,65,0.95)]">
-                <Textarea
+              <div className="flex flex-col w-full flex-grow relative border">
+                <textarea
                   id="prompt-textarea"
+                  className="p-2"
                   autoFocus
                   value={input}
                   onChange={handleInputChange}
@@ -128,7 +138,7 @@ export default function Chat() {
                     }
                   }}
                   placeholder="Ask your question here..."
-                ></Textarea>
+                ></textarea>
                 <Button
                   variant="link"
                   className="absolute right-0 bottom-0"
@@ -146,7 +156,13 @@ export default function Chat() {
   );
 }
 
-const ConversationMessage = ({ message, profile }: { message: any; profile: any }) => {
+const ConversationMessage = ({
+  message,
+  profile,
+}: {
+  message: any;
+  profile: any;
+}) => {
   return (
     <div id="conversation" className="group w-full">
       <div className="p-4 justify-center text-base md:gap-6 md:py-6 m-auto">
@@ -156,20 +172,14 @@ const ConversationMessage = ({ message, profile }: { message: any; profile: any 
               <div className="relative flex">
                 {message.role === "user" ? (
                   <Avatar>
-                    <AvatarFallback
-                      name={profile?.name}
-                      />
-                      <AvatarImage
-                      src={profile?.avatar_url}
-                      />
+                    <AvatarFallback name={profile?.name} />
+                    <AvatarImage src={profile?.avatar_url} />
                   </Avatar>
                 ) : (
                   <Avatar>
-                  <AvatarFallback
-                    name={message.name}
-                    />
+                    <AvatarFallback name={message.name} />
                     <AvatarImage src="/logo/Favicon.svg" />
-                </Avatar>
+                  </Avatar>
                 )}
               </div>
             </div>
