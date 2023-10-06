@@ -167,7 +167,7 @@ const ConversationMessage = ({
     <div id="conversation" className="group w-full">
       <div className="p-4 justify-center text-base md:gap-6 md:py-6 m-auto">
         <div className="flex flex-1 flex-col md:flex-row gap-4 text-base mx-auto md:gap-6 md:max-w-2xl lg:max-w-[38rem] xl:max-w-3xl">
-          <div className="flex-shrink-0 flex flex-col relative items-end">
+          <div className="flex-shrink-0 flex flex-col relative items-start md:items-end">
             <div>
               <div className="relative flex">
                 {message.role === "user" ? (
