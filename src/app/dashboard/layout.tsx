@@ -24,7 +24,7 @@ export default async function DashboardLayout({
   return (
     <main>
       <div>
-        <GradientBackground />
+        {/* <GradientBackground /> */}
         <MainNav />
         <div>{children}</div>
       </div>
