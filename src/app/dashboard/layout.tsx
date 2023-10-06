@@ -2,17 +2,17 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import MainNav from "../(components)/main-nav";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 export default async function DashboardLayout({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies()
+  const cookieStore = cookies();
   const supabase = createServerComponentClient<Database>({
-    cookies: () => cookieStore
-  })
+    cookies: () => cookieStore,
+  });
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -22,14 +22,16 @@ export default async function DashboardLayout({
   }
 
   return (
-    <main>
-      <div>
-        {/* <GradientBackground /> */}
-        <MainNav />
-        <div>{children}</div>
+    <div id="__next">
+      <div className="overflow-hidden w-full h-full relative flex z-0">
+        <div className="relative flex h-full max-w-full flex-1 overflow-hidden">
+          <div className="flex h-full max-w-full flex-1 flex-col">
+            <MainNav />
+            {children}
+          </div>
+        </div>
       </div>
-      <Toaster />
-    </main>
+    </div>
   );
 }
 
@@ -40,7 +42,7 @@ const GradientBackground = () => (
   >
     <div
       className="aspect-[801/1036] w-screen bg-gradient-to-r from-green-500 via-teal-500 to-sky-600 opacity-10 overflow-hidden"
-      style={{
+      styles={{
         clipPath:
           "polygon(63.1% 29.5%, 100% 17.1%, 76.6% 3%, 48.4% 0%, 44.6% 4.7%, 54.5% 25.3%, 59.8% 49%, 55.2% 57.8%, 44.4% 57.2%, 27.8% 47.9%, 35.1% 81.5%, 0% 97.7%, 39.2% 100%, 35.2% 81.4%, 97.2% 52.8%, 63.1% 29.5%)",
       }}

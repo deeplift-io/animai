@@ -8,9 +8,9 @@ export default function MainNav() {
     <motion.div
       initial={{ opacity: 0, transform: "translateY(-10px)" }}
       animate={{ opacity: 1, transform: "translateY(0px)" }}
-      className="sticky top-0 w-full p-4 z-10 border-b border-gray-200"
+      className="sticky top-0 z-10 border-b border-gray-300"
     >
-      <nav className="flex flex-row justify-between">
+      <nav className="flex flex-row justify-between px-2 py-2 md:px-4">
         <div className="font-logo text-slate-700 text-xl align-middle pt-1.5 font-medium">Animai</div>
         <div className="inline-flex space-x-2 items-center">
           <LogoutButton />

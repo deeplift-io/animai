@@ -38,18 +38,16 @@ export default function Page() {
   }
 
   return (
-    <div>
+    <>
       {userProfile?.onboarded_at ? (
         <>
         {/* <div className="text-2xl">Welcome {userProfile.name}, </div> */}
-        <div>
           <ChatCanvas />
-        </div>
         </>
       ) : (
         <OnboardingCard onComplete={() => setOnboardingComplete(true)} />
       )}
       {/* <AnimalMenu /> */}
-    </div>
+    </>
   );
 }

@@ -53,10 +53,11 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex h-full">
-      <div className="flex overflow-hidden w-full">
-        <div className="flex flex-col h-screen overflow-hidden w-full">
-          <ScrollToBottom className="flex flex-col text-sm dark:bg-gray-800 overflow-scroll h-full no-scrollbar mt-40">
+    <div className="relative h-full w-full transition-width overflow-auto flex-1">
+      <div className="flex h-full">
+        <div className="flex-1 overflow-hidden">
+          <ScrollToBottom className="h-full no-scrollbar">
+            <div className="flex flex-col">
             {messages.map((message) => (
               <ConversationMessage
                 key={message.id}
@@ -64,6 +65,8 @@ export default function Chat() {
                 profile={profile}
               />
             ))}
+            <div className="h-32 md:h-48 flex-shrink-0"></div>
+            </div>
             {messages.length === 0 && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -83,7 +86,7 @@ export default function Chat() {
           </ScrollToBottom>
         </div>
       </div>
-      <div className="fixed bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-2 md:pl-2 md:w-[calc(100%-.5rem)]">
+      <div className="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-2 md:pl-2 md:w-[calc(100%-.5rem)]">
         {messages.length === 0 && <div className="lg:max-w-2xl xl:max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, transform: "translateY(-10px)" }}
