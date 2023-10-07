@@ -33,7 +33,7 @@ export default function Home() {
               <span className="sr-only">Open main menu</span>
             </button>
           </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <div className="lg:flex lg:flex-1 lg:justify-end">
             <Link href="/sign-in">
               <Button variant="link">Sign In</Button>
             </Link>
