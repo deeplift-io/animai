@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@fingerprintjs/fingerprintjs': ^4.1.0
   '@hookform/resolvers': ^3.3.1
   '@microsoft/fetch-event-source': ^2.0.1
   '@radix-ui/react-avatar': ^1.0.3
@@ -55,6 +56,7 @@ specifiers:
   zustand: ^4.4.1
 
 dependencies:
+  '@fingerprintjs/fingerprintjs': 4.1.0
   '@hookform/resolvers': 3.3.1_react-hook-form@7.46.1
   '@microsoft/fetch-event-source': 2.0.1
   '@radix-ui/react-avatar': 1.0.3_3xleytyzprlgycb2ded54tx72i
@@ -334,6 +336,12 @@ packages:
   /@eslint/js/8.36.0:
     resolution: {integrity: sha512-lxJ9R5ygVm8ZWgYdUweoq5ownDlJ4upvoWmO4eLxBYHdMo+vZ/Rx0EN6MbKWDJOSUGrqJy2Gt+Dyv/VKml0fjg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dev: false
+
+  /@fingerprintjs/fingerprintjs/4.1.0:
+    resolution: {integrity: sha512-a7RMbIgLEnchrL8TUbYNrsZuRAjN1iha32QXmwYheeLrFSpJW5IgDvuoBnT6R+5LJlZOKOpEU3nXIu3OeQsAlw==}
+    dependencies:
+      tslib: 2.6.2
     dev: false
 
   /@floating-ui/core/1.4.1:

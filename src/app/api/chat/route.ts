@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
+    console.log('body', body);
     const messages = body.messages ?? [];
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;

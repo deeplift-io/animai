@@ -2,7 +2,7 @@
 
 import { useConversationHook } from "@/src/hooks/use-conversations-hook";
 import { Conversation } from "@/src/lib/types";
-import { HistoryIcon } from "lucide-react";
+import { HistoryIcon, MoveLeftIcon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatRelative } from "date-fns";
 import enGB from "date-fns/locale/en-GB";
@@ -32,15 +32,19 @@ export const ConversationsSlideover = () => {
 
   return (
     <div className="fixed z-10 md:relative h-full">
-      <div>
+      <motion.div
+        initial={{ opacity: 0, transform: "translateX(-10px)" }}
+        animate={{ opacity: 1, transform: "translateX(0px)" }}
+        transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+      >
         <Button
-          variant="ghost"
+          variant="outline"
           className="m-2 z-10 pointer-events-all absolute"
           onClick={() => setSlideoverOpen(!slideoverOpen)}
         >
           <div className="text-2xl">💬</div>
         </Button>
-      </div>
+      </motion.div>
 
       <AnimatePresence>
         {slideoverOpen && (
@@ -51,11 +55,16 @@ export const ConversationsSlideover = () => {
           >
             <div>
               <Button
-                variant="ghost"
-                className="m-2 z-10 pointer-events-all absolute -right-20"
+                variant="outline"
+                className="px-2 mt-2 z-10 pointer-events-all absolute -right-20"
                 onClick={() => setSlideoverOpen(!slideoverOpen)}
               >
-                <div className="text-2xl">💬</div>
+                <div className="text-2xl inline-flex items-center space-x-2">
+                  <div>
+                    <MoveLeftIcon />
+                  </div>{" "}
+                  <div>💬</div>
+                </div>
               </Button>
             </div>
             <motion.div
@@ -66,7 +75,9 @@ export const ConversationsSlideover = () => {
               className="border-r border-gray-300 p-2 absolute z-10 h-full bg-slate-50"
             >
               {conversations && (
-                <ConversationsList conversations={conversations} />
+                <div className="h-full overflow-auto">
+                  <ConversationsList conversations={conversations} />
+                </div>
               )}
             </motion.div>
           </motion.aside>
@@ -116,13 +127,13 @@ const ConversationsList = ({ conversations }: Conversation[]) => {
   console.log("grouped conversations", groupedConversations);
 
   return Object.entries(groupedConversations).map(([date, conversations]) => (
-    <div className="overflow-y-auto" key={date}>
+    <div key={date}>
       <div className="text-xs upper text-gray-500 ml-2 my-2">{date}</div>
       {conversations.map((conversation) => (
-        <div className="flex flex-col h-full overflow-auto" key={conversation.id}>
+        <div className="flex flex-col overflow-auto" key={conversation.id}>
           <div className="flex flex-row items-center py-3 rounded-lg cursor-pointer hover:bg-slate-200">
             <div className="ml-2 text-sm text-gray-700">
-              {conversation.title ? conversation.title : "..."}
+              {conversation.title ? conversation.title : "New conversation"}
             </div>
           </div>
           <div className="text-xs text-gray-500">

@@ -11,18 +11,39 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ScrollToBottom from "react-scroll-to-bottom";
 import GradientCard from "@/components/ui/gradient-card";
 
+const starterPrompts = [
+  {
+    title: "My pet isn't eating or drinking",
+    text: "How long can they go without food or water?",
+    agent_instruction: "Ask about the type of pet, age, and weight.",
+  },
+  {
+    title: "I want to improve my pet's health",
+    text: "Can you create a health plan for my pet?",
+    agent_instruction:
+      "Ask about the type of pet, age, weight and what their current regime is.",
+  },
+  {
+    title: "I think my pet ingested something toxic",
+    text: "What are signs should I watch for?",
+    agent_instruction:
+      "Ask about the type of pet, age, weight and what they ingested.",
+  },
+  {
+    title: "My pet is having trouble breathing",
+    text: "What should I do?",
+    agent_instruction:
+      "Ask about the type of pet, age, weight and if they might have ingested something.",
+  },
+];
+
 export default function Chat() {
   const [animals, setAnimals] = useState([]);
   const [profile, setProfile] = useState(null);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    complete,
-  } = useChat({ initialInput: selectedAnimal?.seed_prompt });
+  const [initialPrompt, setInitialPrompt] = useState("");
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({ initialInput: initialPrompt });
   const supabase = createClientComponentClient();
   useEffect(() => {
     const fetchAnimalProfile = async () => {
@@ -53,31 +74,32 @@ export default function Chat() {
     // complete(animal.seed_prompt);
   };
 
-  const starterPrompts = [
-    {
-      title: "My pet isn't eating or drinking",
-      text: "How long can they go without food or water?",
-    },
-    {
-      title: "I want to improve my pet's health",
-      text: "Can you create a health plan for my pet?",
-    },
-    {
-      title: "I think my pet ingested something toxic",
-      text: "What are signs should I watch for?",
-    },
-    {
-      title: "My pet is having trouble breathing",
-      text: "What should I do?",
-    },
-  ];
+  const handleStarterPrompt = (prompt) => {
+    const promptContent = `${prompt.title} ${prompt.text}`;
+    handleInputChange({ target: { value: promptContent } });
+    setInitialPrompt(prompt.agent_instruction);
+
+    const mockEvent: React.FormEvent<HTMLFormElement> = {
+      nativeEvent: new Event("submit"),
+      preventDefault: () => {},
+      target: {
+        value: promptContent,
+      },
+    } as any;
+
+    setTimeout(() => {}, 500);
+
+    // Call handleSubmit
+    handleSubmit(mockEvent);
+  };
 
   return (
-    <div className="relative h-full w-full transition-width overflow-auto flex-1">
+    <div className="relative h-full w-full transition-width flex-1">
       <div className="flex h-full">
         <div className="flex-1 overflow-hidden">
           <ScrollToBottom className="h-full no-scrollbar">
-            <div className="flex flex-col">
+            <div className="flex flex-col h-full">
+              <div className="h-32 md:h-48 flex-shrink-0"></div>
               {messages.map((message) => (
                 <ConversationMessage
                   key={message.id}
@@ -95,18 +117,24 @@ export default function Chat() {
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center h-full"
               >
-                <div className="flex flex-col items-center justify-center h-full">
+                <div className="flex flex-col items-center justify-center px-2 md:px-0 h-full">
                   <div className="text-2xl text-slate-500">
                     Welcome to{" "}
                     <span className="font-logo font-medium">Animai</span>
                   </div>
-                  <div className="text-slate-400 pt-6 pb-4 self-start text-sm">Here are some commonly asked questions:</div>
-                  <div className="grid grid-cols-2 gap-4 pb-4 px-2 md:px-0 max-w-2xl w-full">
+                  <div className="max-w-md text-center text-gray-400">
+                    {`Greetings! If you're worried about your pet, you're in the right place. Describe the issue, and I'll provide guidance.`}
+                  </div>
+                  <div className="text-slate-400 pt-6 pb-4 self-start text-sm inline-flex items-center">
+                    <div className="text-xl pr-1">❓</div>
+                    <div>Here are some commonly asked questions:</div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 px-2 md:px-0 max-w-2xl w-full">
                     {starterPrompts.map((prompt, i) => {
                       return (
                         <motion.div
                           onClick={() => {
-                            handleAnimalSelect(prompt);
+                            handleStarterPrompt(prompt);
                           }}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
@@ -119,8 +147,12 @@ export default function Chat() {
                           key={i}
                         >
                           <GradientCard>
-                            <div className="font-medium text-sm text-gray-600">{prompt.title}</div>
-                            <div className="text-xs text-gray-500">{prompt.text}</div>
+                            <div className="font-medium text-sm text-gray-600">
+                              {prompt.title}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {prompt.text}
+                            </div>
                           </GradientCard>
                         </motion.div>
                       );
@@ -132,42 +164,7 @@ export default function Chat() {
           </ScrollToBottom>
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-2 md:pl-2 md:w-[calc(100%-.5rem)]">
-        {/* {messages.length === 0 && (
-          <div className="lg:max-w-2xl xl:max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, transform: "translateY(-10px)" }}
-              animate={{ opacity: 1, transform: "translateY(0px)" }}
-              transition={{ delay: 0.3 }}
-              className="text-sm text-gray-500 pb-2 px-2 md:px-0 "
-            >
-              Select an animal to talk about
-            </motion.div>
-            <div className="grid grid-cols-3 gap-4 pb-4 px-2 md:px-0">
-              {animals.map((animal, i) => {
-                return (
-                  <motion.div
-                    onClick={() => {
-                      handleAnimalSelect(animal);
-                    }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    initial={{ opacity: 0, transform: "translateY(-10px)" }}
-                    animate={{ opacity: 1, transform: "translateY(0px)" }}
-                    transition={{ delay: i * 0.3 }}
-                    className="bg-white p-2 w-full rounded-lg shadow border border-gray-300 flex flex-col text-gray-800 cursor-pointer hover:bg-gray-50"
-                    key={animal.id}
-                  >
-                    <div className="text-sm">{animal.name}</div>
-                    <div className="text-xs">
-                      {animal.type} {animal.breed}
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        )} */}
+      <div className="absolute bottom-10 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-2 md:pl-2 md:w-[calc(100%-.5rem)]">
         <motion.div
           initial={{ opacity: 0, transform: "translateY(10px)" }}
           animate={{ opacity: 1, transform: "translateY(0px)" }}
@@ -175,11 +172,16 @@ export default function Chat() {
           className="stretch mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-2xl xl:max-w-3xl"
         >
           <div className="relative flex h-full flex-1 items-stretch md:flex-col">
+            <div className="w-full flex justify-end pb-2">
+              <Badge variant="outline" className="text-sm border border-emerald-600 shadow-emerald-50 bg-white shadow text-gray-600">
+                Free messages remaining: 3
+              </Badge>
+            </div>
             <div className="flex w-full items-center flex-col">
-              <div className="flex flex-col w-full flex-grow relative border">
+              <div className="flex flex-col w-full flex-grow relative border rounded-lg">
                 <textarea
                   id="prompt-textarea"
-                  className="p-2"
+                  className="p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-200 focus:shadow-indigo-50 resize-none w-full h-full"
                   autoFocus
                   value={input}
                   onChange={handleInputChange}
@@ -215,12 +217,16 @@ const ConversationMessage = ({
   profile: any;
 }) => {
   return (
-    <div id="conversation" className="group w-full">
+    <div id="conversation" className="group w-full borders-b border-gray-300">
       <div className="p-4 justify-center text-base md:gap-6 md:py-6 m-auto">
-        <div className="flex flex-1 flex-col md:flex-row gap-4 text-base mx-auto md:gap-6 md:max-w-2xl lg:max-w-[38rem] xl:max-w-3xl">
+        <div className={`${message.role === "user" ? 'md:flex-row-reverse' : "md:flex-row"} flex flex-1 flex-col gap-4 text-base mx-auto md:gap-6 md:max-w-2xl lg:max-w-[38rem] xl:max-w-3xl`}>
           <div className="flex-shrink-0 flex flex-col relative items-start md:items-end">
-            <div>
-              <div className="relative flex">
+            <div className="w-full">
+              <div
+                className={`relative flex flex-row ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
                 {message.role === "user" ? (
                   <Avatar>
                     <AvatarFallback name={profile?.name} />
@@ -237,8 +243,16 @@ const ConversationMessage = ({
           </div>
           <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 gizmo:w-full md:gap-3 lg:w-[calc(100%-115px)] gizmo:text-gizmo-gray-600 gizmo:dark:text-gray-300">
             <div className="flex flex-grow flex-col gap-3 max-w-full">
-              <div className="min-h-[20px] flex flex-col items-start gap-3 overflow-x-auto whitespace-pre-wrap break-words">
-                <div className="">{message.content}</div>
+              <div
+                className={`min-h-[20px] flex flex-col gap-3 overflow-x-auto whitespace-pre-wrap break-words`}
+              >
+                <div
+                  className={`${
+                    message.role === "user" ? "text-right" : "text-left"
+                  }`}
+                >
+                  {message.content}
+                </div>
               </div>
             </div>
           </div>
