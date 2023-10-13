@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ScrollToBottom from "react-scroll-to-bottom";
+import GradientCard from "@/components/ui/gradient-card";
 
 export default function Chat() {
   const [animals, setAnimals] = useState([]);
@@ -52,20 +53,39 @@ export default function Chat() {
     // complete(animal.seed_prompt);
   };
 
+  const starterPrompts = [
+    {
+      title: "My pet isn't eating or drinking",
+      text: "How long can they go without food or water?",
+    },
+    {
+      title: "I want to improve my pet's health",
+      text: "Can you create a health plan for my pet?",
+    },
+    {
+      title: "I think my pet ingested something toxic",
+      text: "What are signs should I watch for?",
+    },
+    {
+      title: "My pet is having trouble breathing",
+      text: "What should I do?",
+    },
+  ];
+
   return (
     <div className="relative h-full w-full transition-width overflow-auto flex-1">
       <div className="flex h-full">
         <div className="flex-1 overflow-hidden">
           <ScrollToBottom className="h-full no-scrollbar">
             <div className="flex flex-col">
-            {messages.map((message) => (
-              <ConversationMessage
-                key={message.id}
-                message={message}
-                profile={profile}
-              />
-            ))}
-            <div className="h-32 md:h-48 flex-shrink-0"></div>
+              {messages.map((message) => (
+                <ConversationMessage
+                  key={message.id}
+                  message={message}
+                  profile={profile}
+                />
+              ))}
+              <div className="h-32 md:h-48 flex-shrink-0"></div>
             </div>
             {messages.length === 0 && (
               <motion.div
@@ -76,9 +96,35 @@ export default function Chat() {
                 className="flex flex-col items-center h-full"
               >
                 <div className="flex flex-col items-center justify-center h-full">
-                  <div className="text-2xl text-slate-500">No messages yet</div>
-                  <div className="text-sm text-slate-400">
-                    Select an animal to talk about or ask any question you like
+                  <div className="text-2xl text-slate-500">
+                    Welcome to{" "}
+                    <span className="font-logo font-medium">Animai</span>
+                  </div>
+                  <div className="text-slate-400 pt-6 pb-4 self-start text-sm">Here are some commonly asked questions:</div>
+                  <div className="grid grid-cols-2 gap-4 pb-4 px-2 md:px-0 max-w-2xl w-full">
+                    {starterPrompts.map((prompt, i) => {
+                      return (
+                        <motion.div
+                          onClick={() => {
+                            handleAnimalSelect(prompt);
+                          }}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          initial={{
+                            opacity: 0,
+                            transform: "translateY(-10px)",
+                          }}
+                          animate={{ opacity: 1, transform: "translateY(0px)" }}
+                          transition={{ delay: i * 0.3 }}
+                          key={i}
+                        >
+                          <GradientCard>
+                            <div className="font-medium text-sm text-gray-600">{prompt.title}</div>
+                            <div className="text-xs text-gray-500">{prompt.text}</div>
+                          </GradientCard>
+                        </motion.div>
+                      );
+                    })}
                   </div>
                 </div>
               </motion.div>
@@ -87,39 +133,41 @@ export default function Chat() {
         </div>
       </div>
       <div className="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-2 md:pl-2 md:w-[calc(100%-.5rem)]">
-        {messages.length === 0 && <div className="lg:max-w-2xl xl:max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, transform: "translateY(-10px)" }}
-            animate={{ opacity: 1, transform: "translateY(0px)" }}
-            transition={{ delay: 0.3 }}
-            className="text-sm text-gray-500 pb-2 px-2 md:px-0 "
-          >
-            Select an animal to talk about
-          </motion.div>
-          <div className="grid grid-cols-3 gap-4 pb-4 px-2 md:px-0">
-            {animals.map((animal, i) => {
-              return (
-                <motion.div
-                  onClick={() => { 
-                    handleAnimalSelect(animal);
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  initial={{ opacity: 0, transform: "translateY(-10px)" }}
-                  animate={{ opacity: 1, transform: "translateY(0px)" }}
-                  transition={{ delay: i * 0.3 }}
-                  className="bg-white p-2 w-full rounded-lg shadow border border-gray-300 flex flex-col text-gray-800 cursor-pointer hover:bg-gray-50"
-                  key={animal.id}
-                >
-                  <div className="text-sm">{animal.name}</div>
-                  <div className="text-xs">
-                    {animal.type} {animal.breed}
-                  </div>
-                </motion.div>
-              );
-            })}
+        {/* {messages.length === 0 && (
+          <div className="lg:max-w-2xl xl:max-w-3xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, transform: "translateY(-10px)" }}
+              animate={{ opacity: 1, transform: "translateY(0px)" }}
+              transition={{ delay: 0.3 }}
+              className="text-sm text-gray-500 pb-2 px-2 md:px-0 "
+            >
+              Select an animal to talk about
+            </motion.div>
+            <div className="grid grid-cols-3 gap-4 pb-4 px-2 md:px-0">
+              {animals.map((animal, i) => {
+                return (
+                  <motion.div
+                    onClick={() => {
+                      handleAnimalSelect(animal);
+                    }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    initial={{ opacity: 0, transform: "translateY(-10px)" }}
+                    animate={{ opacity: 1, transform: "translateY(0px)" }}
+                    transition={{ delay: i * 0.3 }}
+                    className="bg-white p-2 w-full rounded-lg shadow border border-gray-300 flex flex-col text-gray-800 cursor-pointer hover:bg-gray-50"
+                    key={animal.id}
+                  >
+                    <div className="text-sm">{animal.name}</div>
+                    <div className="text-xs">
+                      {animal.type} {animal.breed}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
-        </div>}
+        )} */}
         <motion.div
           initial={{ opacity: 0, transform: "translateY(10px)" }}
           animate={{ opacity: 1, transform: "translateY(0px)" }}

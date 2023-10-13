@@ -26,6 +26,7 @@ specifiers:
   class-variance-authority: ^0.7.0
   clsx: ^2.0.0
   cmdk: ^0.2.0
+  date-fns: ^2.30.0
   encoding: ^0.1.13
   eslint: 8.36.0
   eslint-config-next: 13.2.4
@@ -78,6 +79,7 @@ dependencies:
   class-variance-authority: 0.7.0
   clsx: 2.0.0
   cmdk: 0.2.0_zula6vjvt3wdocc4mwcxqa6nzi
+  date-fns: 2.30.0
   eslint: 8.36.0
   eslint-config-next: 13.2.4_j4766f7ecgqbon3u7zlxn5zszu
   framer-motion: 10.16.1_biqbaboplfbrettd7655fr4n2y
@@ -3200,6 +3202,13 @@ packages:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
     engines: {node: '>= 12'}
     dev: true
+
+  /date-fns/2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.22.10
+    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}

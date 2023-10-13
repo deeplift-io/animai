@@ -3,6 +3,8 @@ import MainNav from "../(components)/main-nav";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import { HistoryIcon } from "lucide-react";
+import { ConversationsSlideover } from "../(components)/slide-overs/conversations-slideover";
 
 export default async function DashboardLayout({
   children, // will be a page or nested layout
@@ -27,7 +29,10 @@ export default async function DashboardLayout({
         <div className="relative flex h-full max-w-full flex-1 overflow-hidden">
           <div className="flex h-full max-w-full flex-1 flex-col">
             <MainNav />
-            {children}
+            <div className="flex flex-row h-full max-w-full flex-1">
+              <ConversationsSlideover />
+              <div className="flex h-full max-w-full w-full">{children}</div>
+            </div>
           </div>
         </div>
       </div>

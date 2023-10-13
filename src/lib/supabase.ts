@@ -36,30 +36,82 @@ export interface Database {
     Tables: {
       animals: {
         Row: {
+          age: number | null
           avatar_url: string | null
+          breed: string | null
           created_at: string | null
           id: string
           name: string
           profile_id: string
+          seed_prompt: string | null
+          type: string | null
         }
         Insert: {
+          age?: number | null
           avatar_url?: string | null
+          breed?: string | null
           created_at?: string | null
           id?: string
           name: string
           profile_id: string
+          seed_prompt?: string | null
+          type?: string | null
         }
         Update: {
+          age?: number | null
           avatar_url?: string | null
+          breed?: string | null
           created_at?: string | null
           id?: string
           name?: string
           profile_id?: string
+          seed_prompt?: string | null
+          type?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "animals_profile_id_fkey"
             columns: ["profile_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      conversations: {
+        Row: {
+          advanced_settings: Json | null
+          created_at: string | null
+          history_type: string | null
+          id: string
+          model: string | null
+          owner: string | null
+          system_prompt: string | null
+          title: string | null
+        }
+        Insert: {
+          advanced_settings?: Json | null
+          created_at?: string | null
+          history_type?: string | null
+          id?: string
+          model?: string | null
+          owner?: string | null
+          system_prompt?: string | null
+          title?: string | null
+        }
+        Update: {
+          advanced_settings?: Json | null
+          created_at?: string | null
+          history_type?: string | null
+          id?: string
+          model?: string | null
+          owner?: string | null
+          system_prompt?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_owner_fkey"
+            columns: ["owner"]
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
@@ -86,24 +138,73 @@ export interface Database {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          content: string | null
+          conversation: string | null
+          created_at: string | null
+          embedding: string | null
+          id: number
+          owner: string | null
+          role: string | null
+          token_size: number | null
+        }
+        Insert: {
+          content?: string | null
+          conversation?: string | null
+          created_at?: string | null
+          embedding?: string | null
+          id?: number
+          owner?: string | null
+          role?: string | null
+          token_size?: number | null
+        }
+        Update: {
+          content?: string | null
+          conversation?: string | null
+          created_at?: string | null
+          embedding?: string | null
+          id?: number
+          owner?: string | null
+          role?: string | null
+          token_size?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_fkey"
+            columns: ["conversation"]
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_owner_fkey"
+            columns: ["owner"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           created_at: string | null
           id: string
-          name: string
+          name: string | null
+          onboarded_at: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string | null
           id: string
-          name: string
+          name?: string | null
+          onboarded_at?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string | null
           id?: string
-          name?: string
+          name?: string | null
+          onboarded_at?: string | null
         }
         Relationships: [
           {
@@ -193,7 +294,6 @@ export interface Database {
           id: string
           name: string
           owner: string | null
-          owner_id: string | null
           public: boolean | null
           updated_at: string | null
         }
@@ -205,7 +305,6 @@ export interface Database {
           id: string
           name: string
           owner?: string | null
-          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
@@ -217,11 +316,17 @@ export interface Database {
           id?: string
           name?: string
           owner?: string | null
-          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "buckets_owner_fkey"
+            columns: ["owner"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       migrations: {
         Row: {
@@ -253,7 +358,6 @@ export interface Database {
           metadata: Json | null
           name: string | null
           owner: string | null
-          owner_id: string | null
           path_tokens: string[] | null
           updated_at: string | null
           version: string | null
@@ -266,7 +370,6 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
-          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
@@ -279,7 +382,6 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
-          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
@@ -361,3 +463,4 @@ export interface Database {
     }
   }
 }
+
