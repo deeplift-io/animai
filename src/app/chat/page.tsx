@@ -33,7 +33,7 @@ export default function Page() {
       } else {
         useVisitorStore.getState().setActiveVisitor(visitorData[0]);
         setVisitor(visitorData[0]);
-        console.log('set visitor now');
+        console.log("set visitor now");
       }
     };
     getVisitorData();
@@ -43,12 +43,16 @@ export default function Page() {
 
   const handleInserts = (payload) => {
     setVisitor(payload.new);
-  }
+  };
 
   supabase
-  .channel('visitors')
-  .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'visitors' }, handleInserts)
-  .subscribe()
+    .channel("visitors")
+    .on(
+      "postgres_changes",
+      { event: "UPDATE", schema: "public", table: "visitors" },
+      handleInserts
+    )
+    .subscribe();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -70,7 +74,13 @@ export default function Page() {
   }, [onboardingComplete]);
 
   if (!userProfile) {
-    return <ChatCanvasGuest visitor={visitor} />;
+    return (
+      <>
+        <>
+          <ChatCanvasGuest visitor={visitor} />
+        </>
+      </>
+    );
   }
 
   return (

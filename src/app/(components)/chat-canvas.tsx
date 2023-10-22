@@ -94,15 +94,12 @@ export default function Chat() {
     handleSubmit(mockEvent);
   };
 
-  console.log('chat canvas auth');
-
   return (
     <div className="h-full w-full overflow-auto transition-width flex-1">
       <div className="flex h-full">
         <div className="flex-1 overflow-hidden">
           <ScrollToBottom className="h-full no-scrollbar">
             {messages.length > 0 && <div className="flex flex-col">
-              {/* <div className="h-32 md:h-48 flex-shrink-0"></div> */}
               {messages.map((message) => (
                 <ConversationMessage
                   key={message.id}
@@ -110,7 +107,7 @@ export default function Chat() {
                   profile={profile}
                 />
               ))}
-              <div className="h-32 md:h-48 flex-shrink-0"></div>
+              <div className="h-[10rem] md:h-48 flex-shrink-0"></div>
             </div>}
             {messages.length === 0 && (
               <motion.div

@@ -77,7 +77,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                   message={message}
                 />
               ))}
-              <div className="h-32 md:h-48 flex-shrink-0"></div>
+              <div className="h-[10rem] md:h-48 flex-shrink-0"></div>
             </div>}
             {messages.length === 0 && (
               <motion.div
@@ -87,7 +87,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center h-full"
               >
-                <div className="flex flex-col items-center justify-center px-2 md:px-0 h-full pt-16 md:pt-32">
+                <div className="flex flex-col items-center justify-center px-2 md:px-0 h-full">
                   <div className="text-3xl text-slate-700 pb-4">
                     Welcome to{" "}
                     <span className="font-logo font-medium">Animai</span>
@@ -181,7 +181,7 @@ const ConversationMessage = ({
   message: any;
 }) => {
   return (
-    <div id="conversation" className="group w-full border-b border-gray-200 hover:bg-slate-50">
+    <div id="conversation" className="group w-full border-b border-gray-200 hover:bg-slate-50 transition-all">
       <div className="p-4 justify-center text-base md:gap-6 md:py-6 m-auto">
         <div
           className={`${
