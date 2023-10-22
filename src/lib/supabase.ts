@@ -188,6 +188,7 @@ export interface Database {
         Row: {
           avatar_url: string | null
           created_at: string | null
+          fingerprint_id: string | null
           id: string
           name: string | null
           onboarded_at: string | null
@@ -195,6 +196,7 @@ export interface Database {
         Insert: {
           avatar_url?: string | null
           created_at?: string | null
+          fingerprint_id?: string | null
           id: string
           name?: string | null
           onboarded_at?: string | null
@@ -202,6 +204,7 @@ export interface Database {
         Update: {
           avatar_url?: string | null
           created_at?: string | null
+          fingerprint_id?: string | null
           id?: string
           name?: string | null
           onboarded_at?: string | null
@@ -214,6 +217,30 @@ export interface Database {
             referencedColumns: ["id"]
           }
         ]
+      }
+      visitors: {
+        Row: {
+          conversation_blob: Json[] | null
+          created_at: string | null
+          fingerprint_id: string | null
+          id: number
+          message_allowance: number
+        }
+        Insert: {
+          conversation_blob?: Json[] | null
+          created_at?: string | null
+          fingerprint_id?: string | null
+          id?: number
+          message_allowance?: number
+        }
+        Update: {
+          conversation_blob?: Json[] | null
+          created_at?: string | null
+          fingerprint_id?: string | null
+          id?: number
+          message_allowance?: number
+        }
+        Relationships: []
       }
     }
     Views: {

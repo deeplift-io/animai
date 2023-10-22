@@ -11,7 +11,7 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
   title: "Animai | The vet in your pocket",
-  description: "Our AI powered app helps you take care of your pets.",
+  description: "Get helpful, accurate assistance with your pet's health and well being.",
 };
 
 export default function RootLayout({

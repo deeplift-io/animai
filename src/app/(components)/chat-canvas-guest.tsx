@@ -11,6 +11,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ScrollToBottom from "react-scroll-to-bottom";
 import GradientCard from "@/components/ui/gradient-card";
 import { SendIcon } from "lucide-react";
+import { useVisitorStore } from "@/src/lib/stores/visitor-store";
+import { useGetVisitorHook } from "@/src/hooks/useGetVisitorHook";
+import { Visitor } from "@/src/services/visitor";
 
 const starterPrompts = [
   {
@@ -38,42 +41,10 @@ const starterPrompts = [
   },
 ];
 
-export default function Chat() {
-  const [animals, setAnimals] = useState([]);
-  const [profile, setProfile] = useState(null);
-  const [selectedAnimal, setSelectedAnimal] = useState(null);
+export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
   const [initialPrompt, setInitialPrompt] = useState("");
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({ initialInput: initialPrompt });
-  const supabase = createClientComponentClient();
-  useEffect(() => {
-    const fetchAnimalProfile = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles") //table name
-        .select("*") //columns to select from the database
-        .eq("id", user?.id)
-        .single();
-
-      const { data: animals, error: latestAnimalError } = await supabase
-        .from("animals") //table name
-        .select("*") //columns to select from the database
-        .eq("profile_id", user?.id)
-        .order("created_at", { ascending: false });
-
-      setProfile(profileData);
-      setAnimals(animals);
-    };
-
-    fetchAnimalProfile();
-  }, []);
-
-  const handleAnimalSelect = (animal) => {
-    setSelectedAnimal(animal);
-    // complete(animal.seed_prompt);
-  };
+    useChat({ initialInput: initialPrompt, api: "/api/chat-guest", body: { visitor: visitor } });
 
   const handleStarterPrompt = (prompt) => {
     const promptContent = `${prompt.title} ${prompt.text}`;
@@ -94,20 +65,16 @@ export default function Chat() {
     handleSubmit(mockEvent);
   };
 
-  console.log('chat canvas auth');
-
   return (
     <div className="h-full w-full overflow-auto transition-width flex-1">
       <div className="flex h-full">
         <div className="flex-1 overflow-hidden">
           <ScrollToBottom className="h-full no-scrollbar">
             {messages.length > 0 && <div className="flex flex-col">
-              {/* <div className="h-32 md:h-48 flex-shrink-0"></div> */}
               {messages.map((message) => (
                 <ConversationMessage
                   key={message.id}
                   message={message}
-                  profile={profile}
                 />
               ))}
               <div className="h-32 md:h-48 flex-shrink-0"></div>
@@ -120,15 +87,15 @@ export default function Chat() {
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center h-full"
               >
-                <div className="flex flex-col items-center justify-center px-2 md:px-0 h-full">
-                  <div className="text-2xl text-slate-700">
+                <div className="flex flex-col items-center justify-center px-2 md:px-0 h-full pt-16 md:pt-32">
+                  <div className="text-3xl text-slate-700 pb-4">
                     Welcome to{" "}
                     <span className="font-logo font-medium">Animai</span>
                   </div>
-                  <div className="max-w-md text-center text-gray-400">
+                  <div className="max-w-md text-center text-gray-400 text-xl">
                     {`Greetings! If you're worried about your pet, you're in the right place. Describe the issue, and I'll provide guidance.`}
                   </div>
-                  <div className="text-slate-400 pt-6 pb-4 self-start text-sm inline-flex items-center">
+                  <div className="text-slate-400 pt-6 pb-4 self-start text-lg inline-flex items-center">
                     <div className="text-xl pr-1">❓</div>
                     <div>Here are some commonly asked questions:</div>
                   </div>
@@ -176,6 +143,7 @@ export default function Chat() {
         >
           <div className="relative flex h-full flex-1 items-stretch md:flex-col">
             <div className="flex w-full items-center flex-col">
+            <div className="mb-2 bg-gradient-to-bl from-indigo-800 via-indigo-700 to-indigo-800 px-2 text-indigo-50 rounded-full self-start shadow shadow-indigo-100 border border-indigo-500">{visitor?.message_allowance} messages remaining</div>
                 <div className="flex flex-col w-full flex-grow relative border bg-white border-gray-300 focus:border-indigo-700 p-4 rounded-lg">
                   <textarea
                     id="prompt-textarea"
@@ -209,13 +177,11 @@ export default function Chat() {
 
 const ConversationMessage = ({
   message,
-  profile,
 }: {
   message: any;
-  profile: any;
 }) => {
   return (
-    <div id="conversation" className="group w-full border-b border-gray-200">
+    <div id="conversation" className="group w-full border-b border-gray-200 hover:bg-slate-50">
       <div className="p-4 justify-center text-base md:gap-6 md:py-6 m-auto">
         <div
           className={`${

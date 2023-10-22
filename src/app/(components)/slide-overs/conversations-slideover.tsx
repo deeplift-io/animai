@@ -1,13 +1,14 @@
 "use client";
 
-import { useConversationHook } from "@/src/hooks/use-conversations-hook";
+import { useConversationHook } from "@/src/hooks/useConversationsHook";
 import { Conversation } from "@/src/lib/types";
-import { HistoryIcon, MoveLeftIcon } from "lucide-react";
+import { History, HistoryIcon, MoveLeftIcon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatRelative } from "date-fns";
 import enGB from "date-fns/locale/en-GB";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Session } from "@supabase/supabase-js";
 
 const sideVariants = {
   closed: {
@@ -24,11 +25,10 @@ const sideVariants = {
   },
 };
 
-export const ConversationsSlideover = () => {
+export const ConversationsSlideover = ({ session }: { session: Session | null }) => {
   const slideoverWidth = 200;
   const { data: conversations, isLoading } = useConversationHook();
   const [slideoverOpen, setSlideoverOpen] = useState(false);
-  console.log(slideoverOpen);
 
   return (
     <div className="fixed z-10 md:relative h-full">
@@ -72,11 +72,36 @@ export const ConversationsSlideover = () => {
               initial="closed"
               animate={{ width: slideoverWidth }}
               exit="closed"
-              className="border-r border-gray-300 p-2 absolute z-10 h-full bg-slate-50"
+              className="border-r border-gray-300 p-2 absolute z-10 h-full bg-white"
             >
-              {conversations && (
-                <div className="h-full overflow-auto">
-                  <ConversationsList conversations={conversations} />
+              {session ? (
+                <>
+                  {conversations && (
+                    <div className="h-full overflow-auto">
+                      <ConversationsList conversations={conversations} />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="relative h-full">
+                  <motion.div
+                    initial={{ opacity: 0, transform: "translateX(-10px)" }}
+                    animate={{ opacity: 1, transform: "translateX(0px)" }}
+                    transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
+                    className="absolute top-1/3"
+                  >
+                    <div className="p-2 border border-gray-300 shadow bg-slate-50 rounded-lg">
+                      <div className="flex flex-col items-center">
+                        <div className="text-2xl mb-2">👋</div>
+                        <div className="text-center text-gray-700">
+                          Sign in to see your saved conversations
+                        </div>
+                        <div className="pt-6">
+                          <Button variant="special">Get started</Button>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
               )}
             </motion.div>

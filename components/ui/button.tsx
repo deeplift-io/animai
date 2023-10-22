@@ -5,14 +5,14 @@ import { cn } from "@/src/lib/utils/tailwind";
 import LoadingSpinner from "./loading-spinner";
 
 const buttonVariants = cva(
-  "rounded-xl inline-flex font-regular items-center justify-center ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "rounded-lg inline-flex font-regular items-center justify-center ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
           "bg-primary text-primary-foreground hover:bg-primary/90 border-primary",
         special:
-          "w-full text-blue-50 bg-gradient-to-l from-blue-600 via-blue-700 to-blue-600 border border-blue-700",
+          "w-full text-indigo-50 rounded-full bg-gradient-to-b from-indigo-700 via-indigo-800 to-indigo-700 border border-indigo-700 shadow shadow-indigo-50",
         inverse:
           "bg-background text-background-foreground border-gray-300 shadow-none hover:bg-background/90 border",
         destructive:

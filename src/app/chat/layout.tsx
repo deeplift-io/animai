@@ -19,16 +19,12 @@ export default async function DashboardLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session) {
-    redirect("/sign-in");
-  }
-
   return (
     <div id="__next">
       <div className="overflow-hidden w-full h-full relative flex z-0">
         <div className="relative flex h-full max-w-full flex-1 overflow-hidden">
           <div className="flex h-full max-w-full flex-1 flex-col">
-            <MainNav />
+            <MainNav session={session} />
             <div className="flex flex-row h-full max-w-full flex-1">
               <ConversationsSlideover />
               <div className="flex h-full max-w-full w-full">{children}</div>

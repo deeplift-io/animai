@@ -10,10 +10,12 @@ import { Conversation } from "../../../services/conversation";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Message } from "../../../services/message";
+import { Visitor } from "@/src/services/visitor";
+import { useVisitorStore } from "@/src/lib/stores/visitor-store";
 
 export const runtime = "edge";
 
-const chatModel = "gpt-4"
+const chatModel = "gpt-4";
 
 const advanedSettings = {
   temperature: 0.8,
@@ -22,7 +24,7 @@ const advanedSettings = {
   frequency_penalty: 0.5,
   presence_penalty: 0.5,
   best_of: 5,
-}
+};
 
 const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
@@ -43,29 +45,35 @@ AI:`;
  * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
  */
 export async function POST(req: NextRequest) {
-  const cookieStore = cookies()
+  const cookieStore = cookies();
   const supabase = createServerComponentClient<Database>({
-    cookies: () => cookieStore
-  })
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    cookies: () => cookieStore,
+  });
 
   try {
     const body = await req.json();
     const messages = body.messages ?? [];
+    const visitorBody = body.visitor ?? [];
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
     const prompt = PromptTemplate.fromTemplate<{
       chat_history: string;
       input: string;
     }>(TEMPLATE);
+    const visitor = new Visitor(body.visitor.fingerprint_id);
+    const visitorData = await visitor.getVisitor();
+    
+    if (visitorData[0].message_allowance <= 0) {
+      return new Response("No messages left", {
+        status: 403,
+      });
+    }
 
     // Get the currently active conversation from zustand.
-    const conversationId = useConversationStore.getState().activeConversation;
+    // const conversationId = useConversationStore.getState().activeConversation;
+
     /**
-     * 
+     *
      *
      * See a full list of supported models at:
      * https://js.langchain.com/docs/modules/model_io/models/
@@ -76,33 +84,33 @@ export async function POST(req: NextRequest) {
       callbacks: [
         {
           handleLLMEnd: async (output: LLMResult) => {
-            const conversationId = useConversationStore.getState().activeConversation;
-
-            if (!output) {
-              throw new Error("No output");
-            }
-
-            if (!conversationId) {
-              throw new Error("No active conversation");
-            }
-
-            const content = output.generations[0][0].text;
-
-            const message = new Message(session?.user.id);
-            await message.addEntry({
-              content: content,
-              role: "ai",
-              conversationId: conversationId,
+            await visitor.updateVisitor({
+              ...visitorData[0],
+              message_allowance: visitorData[0].message_allowance - 1,
+              // conversation_blob: JSON.stringify(output),
             });
+            // const conversationId = useConversationStore.getState().activeConversation;
+            // if (!output) {
+            //   throw new Error("No output");
+            // }
+            // if (!conversationId) {
+            //   throw new Error("No active conversation");
+            // }
+            // const content = output.generations[0][0].text;
+            // const message = new Message(session?.user.id);
+            // await message.addEntry({
+            //   content: content,
+            //   role: "ai",
+            //   conversationId: conversationId,
+            // });
           },
         },
       ],
     });
 
-    if (!session) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-    }
-
+    // if (!session) {
+    //   return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    // }
 
     /**
      * Chat models stream message chunks rather than bytes, so this
@@ -110,43 +118,43 @@ export async function POST(req: NextRequest) {
      */
     const outputParser = new BytesOutputParser();
 
-    if (!conversationId) {
-      const conversation = new Conversation(session?.user.id);
-      try {
-        await conversation.addConversation({
-          title: null,
-          system_prompt: TEMPLATE,
-          model: chatModel, 
-          advanced_settings: advanedSettings,
-        });
+    // if (!conversationId) {
+    //   const conversation = new Conversation(session?.user.id);
+    //   try {
+    //     await conversation.addConversation({
+    //       title: null,
+    //       system_prompt: TEMPLATE,
+    //       model: chatModel,
+    //       advanced_settings: advanedSettings,
+    //     });
 
-        const newConversation = await conversation.getLatestConversation();
+    //     const newConversation = await conversation.getLatestConversation();
 
-        if (!newConversation) {
-          throw new Error("Could not create conversation");
-        }
+    //     if (!newConversation) {
+    //       throw new Error("Could not create conversation");
+    //     }
 
-        useConversationStore.getState().setActiveConversation(newConversation?.id);
+    //     useConversationStore.getState().setActiveConversation(newConversation?.id);
 
-        const message = new Message(session?.user.id);
+    //     const message = new Message(session?.user.id);
 
-        await message.addEntry({
-          content: currentMessageContent,
-          role: "user",
-          conversationId: newConversation.id,
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      const message = new Message(session?.user.id);
+    //     await message.addEntry({
+    //       content: currentMessageContent,
+    //       role: "user",
+    //       conversationId: newConversation.id,
+    //     });
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // } else {
+    //   const message = new Message(session?.user.id);
 
-      await message.addEntry({
-        content: currentMessageContent,
-        role: "user",
-        conversationId: conversationId,
-      });
-    }
+    //   await message.addEntry({
+    //     content: currentMessageContent,
+    //     role: "user",
+    //     conversationId: conversationId,
+    //   });
+    // }
 
     /**
      * Can also initialize as:
@@ -166,5 +174,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
-
-const saveMessage = () => {};
