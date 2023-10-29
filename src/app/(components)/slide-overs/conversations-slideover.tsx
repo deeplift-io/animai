@@ -9,6 +9,7 @@ import enGB from "date-fns/locale/en-GB";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Session } from "@supabase/supabase-js";
+import Link from "next/link";
 
 const sideVariants = {
   closed: {
@@ -26,7 +27,7 @@ const sideVariants = {
 };
 
 export const ConversationsSlideover = ({ session }: { session: Session | null }) => {
-  const slideoverWidth = 200;
+  const slideoverWidth = 300;
   const { data: conversations, isLoading } = useConversationHook();
   const [slideoverOpen, setSlideoverOpen] = useState(false);
 
@@ -72,7 +73,7 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
               initial="closed"
               animate={{ width: slideoverWidth }}
               exit="closed"
-              className="border-r border-gray-300 p-2 absolute z-10 h-full bg-white"
+              className="border-r border-gray-300 absolute z-10 h-full bg-white"
             >
               {session ? (
                 <>
@@ -90,14 +91,17 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
                     transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
                     className="absolute top-1/3"
                   >
-                    <div className="p-2 border border-gray-300 shadow bg-slate-50 rounded-lg">
+                    <div className="px-8">
                       <div className="flex flex-col items-center">
                         <div className="text-2xl mb-2">👋</div>
                         <div className="text-center text-gray-700">
-                          Sign in to see your saved conversations
+                          You&apos;ll  need to make an account to see saved conversations.
                         </div>
+                        <div className="px-2 py-1 rounded-lg bg-gray-50 text-gray-800 text-sm mt-2 border border-gray-200 font-medium">No credit card required</div>
                         <div className="pt-6">
+                          <Link href="/chat/login">
                           <Button variant="special">Get started</Button>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -149,14 +153,12 @@ const ConversationsList = ({ conversations }: Conversation[]) => {
     return groups;
   }, {} as { [key: string]: Conversation[] });
 
-  console.log("grouped conversations", groupedConversations);
-
   return Object.entries(groupedConversations).map(([date, conversations]) => (
     <div key={date}>
-      <div className="text-xs upper text-gray-500 ml-2 my-2">{date}</div>
+      <div className="text-xs upper text-black ml-2 my-2 sticky top-1 bg-slate-300 bg-opacity-20 backdrop-blur-lg py-2 px-2 rounded-xl m-2 border border-gray-100">{date}</div>
       {conversations.map((conversation) => (
-        <div className="flex flex-col overflow-auto" key={conversation.id}>
-          <div className="flex flex-row items-center py-3 rounded-lg cursor-pointer hover:bg-slate-200">
+        <Link href={`/chat/${conversation.id}`} className="flex flex-col overflow-auto mx-2" key={conversation.id}>
+          <div className="flex flex-row items-center py-3 rounded-xl cursor-pointer hover:bg-slate-50 hover:border-slate-200 border border-white">
             <div className="ml-2 text-sm text-gray-700">
               {conversation.title ? conversation.title : "New conversation"}
             </div>
@@ -164,7 +166,7 @@ const ConversationsList = ({ conversations }: Conversation[]) => {
           <div className="text-xs text-gray-500">
             {/* {conversation.messages.length} */}
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   ));

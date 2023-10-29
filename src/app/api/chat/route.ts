@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
           advanced_settings: advanedSettings,
         });
 
-        const newConversation = await conversation.getLatestConversation();
+        const newConversation = await conversation.getLatestConversation("latest");
 
         if (!newConversation) {
           throw new Error("Could not create conversation");

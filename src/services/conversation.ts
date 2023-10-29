@@ -7,7 +7,9 @@ class Conversation {
     this.userId = userId;
   }
 
-  public async addConversation(newConversation: Omit<ConversationType, 'owner'>) {
+  public async addConversation(
+    newConversation: Omit<ConversationType, "owner">
+  ) {
     try {
       const { error } = await supabaseAdminClient
         .from("conversations")
@@ -40,15 +42,48 @@ class Conversation {
     return history;
   }
 
-  public async getLatestConversation(): Promise<ConversationType | null> {
-    const { data: conversation, error } = await supabaseAdminClient
-      .from("conversations")
-      .select(`
+  public async getConversation(
+    conversationId: string
+  ): Promise<ConversationType | null> {
+    try {
+      const { data: conversation, error } = await supabaseAdminClient
+        .from("conversations")
+        .select(
+          `
       *,
       messages (
         *
       )
-    `)
+    `
+        )
+        .eq("id", conversationId)
+        .single();
+
+      if (error) {
+        console.log("error made it");
+        console.log(`Error fetching conversation: ${error.message}`);
+        return null;
+      }
+      
+      return conversation;
+    } catch (e) {
+      console.log("error made it");
+      console.log(`Error fetching conversation: ${e}`);
+      return null;
+    }
+  }
+
+  public async getLatestConversation(): Promise<ConversationType | null> {
+    const { data: conversation, error } = await supabaseAdminClient
+      .from("conversations")
+      .select(
+        `
+      *,
+      messages (
+        *
+      )
+    `
+      )
       .eq("owner", this.userId)
       .order("created_at", { ascending: false })
       .limit(1)
@@ -62,7 +97,10 @@ class Conversation {
     return conversation;
   }
 
-  public async updateConversation(conversationId: string, newConversation: Omit<ConversationType, 'owner'>) {
+  public async updateConversation(
+    conversationId: string,
+    newConversation: Omit<ConversationType, "owner">
+  ) {
     try {
       const { error } = await supabaseAdminClient
         .from("conversations")

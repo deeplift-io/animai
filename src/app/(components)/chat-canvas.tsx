@@ -11,6 +11,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ScrollToBottom from "react-scroll-to-bottom";
 import GradientCard from "@/components/ui/gradient-card";
 import { SendIcon } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import { Conversation } from "@/src/lib/types";
+import { useRouter } from "next/navigation";
 
 const starterPrompts = [
   {
@@ -38,19 +41,30 @@ const starterPrompts = [
   },
 ];
 
-export default function Chat() {
+export default function Chat({
+  conversation,
+}: {
+  conversation: Conversation | null;
+}) {
   const [animals, setAnimals] = useState([]);
   const [profile, setProfile] = useState(null);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [initialPrompt, setInitialPrompt] = useState("");
+  const supabase = createClientComponentClient();
+  const router = useRouter();
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({ initialInput: initialPrompt });
-  const supabase = createClientComponentClient();
   useEffect(() => {
     const fetchAnimalProfile = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.refresh();
+      };
+
+
       const { data: profileData, error: profileError } = await supabase
         .from("profiles") //table name
         .select("*") //columns to select from the database
@@ -70,10 +84,10 @@ export default function Chat() {
     fetchAnimalProfile();
   }, []);
 
-  const handleAnimalSelect = (animal) => {
-    setSelectedAnimal(animal);
-    // complete(animal.seed_prompt);
-  };
+  // const handleAnimalSelect = (animal) => {
+  //   setSelectedAnimal(animal);
+  //   // complete(animal.seed_prompt);
+  // };
 
   const handleStarterPrompt = (prompt) => {
     const promptContent = `${prompt.title} ${prompt.text}`;
@@ -94,22 +108,28 @@ export default function Chat() {
     handleSubmit(mockEvent);
   };
 
+  const activeMessages = conversation ? conversation.messages : messages;
+
+  console.log("active messages", activeMessages);
+
   return (
     <div className="h-full w-full overflow-auto transition-width flex-1">
       <div className="flex h-full">
         <div className="flex-1 overflow-hidden">
           <ScrollToBottom className="h-full no-scrollbar">
-            {messages.length > 0 && <div className="flex flex-col">
-              {messages.map((message) => (
-                <ConversationMessage
-                  key={message.id}
-                  message={message}
-                  profile={profile}
-                />
-              ))}
-              <div className="h-[10rem] md:h-48 flex-shrink-0"></div>
-            </div>}
-            {messages.length === 0 && (
+            {activeMessages.length > 0 && (
+              <div className="flex flex-col">
+                {activeMessages.map((message) => (
+                  <ConversationMessage
+                    key={message.id}
+                    message={message}
+                    profile={profile}
+                  />
+                ))}
+                <div className="h-[10rem] md:h-48 flex-shrink-0"></div>
+              </div>
+            )}
+            {activeMessages.length === 0 && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -118,16 +138,9 @@ export default function Chat() {
                 className="flex flex-col items-center h-full"
               >
                 <div className="flex flex-col items-center justify-center px-2 md:px-0 h-full">
-                  <div className="text-2xl text-slate-700">
-                    Welcome to{" "}
-                    <span className="font-logo font-medium">Animai</span>
-                  </div>
-                  <div className="max-w-md text-center text-gray-400">
-                    {`Greetings! If you're worried about your pet, you're in the right place. Describe the issue, and I'll provide guidance.`}
-                  </div>
-                  <div className="text-slate-400 pt-6 pb-4 self-start text-sm inline-flex items-center">
-                    <div className="text-xl pr-1">❓</div>
-                    <div>Here are some commonly asked questions:</div>
+                  <div className="text-2xl text-slate-700">Welcome back!</div>
+                  <div className="max-w-md text-center text-gray-400 pb-8">
+                    {`If you're worried about your pet, you're in the right place. Describe the issue, and I'll provide guidance.`}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 px-2 md:px-0 max-w-2xl w-full">
                     {starterPrompts.map((prompt, i) => {
@@ -173,29 +186,29 @@ export default function Chat() {
         >
           <div className="relative flex h-full flex-1 items-stretch md:flex-col">
             <div className="flex w-full items-center flex-col">
-                <div className="flex flex-col w-full flex-grow relative border bg-white border-gray-300 focus:border-indigo-700 p-4 rounded-lg">
-                  <textarea
-                    id="prompt-textarea"
-                    className="ring-0 outline-none w-full h-full resize-none rounded-lg border-white bg-transparent"
-                    autoFocus
-                    value={input}
-                    onChange={handleInputChange}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleSubmit(e);
-                      }
-                    }}
-                    placeholder="Ask Animai anything you want about your pet."
-                  ></textarea>
-                  <Button
-                    variant="ghost"
-                    className="absolute right-0 bottom-0 m-2 group"
-                    isLoading={isLoading}
-                    onClick={(e) => handleSubmit(e)}
-                  >
-                    <SendIcon className="text-gray-600 group-hover:text-indigo-500" />
-                  </Button>
-                </div>
+              <div className="flex flex-col w-full flex-grow relative border bg-white border-gray-300 focus:border-indigo-700 p-4 rounded-lg">
+                <textarea
+                  id="prompt-textarea"
+                  className="ring-0 outline-none w-full h-full resize-none rounded-lg border-white bg-transparent"
+                  autoFocus
+                  value={input}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSubmit(e);
+                    }
+                  }}
+                  placeholder="Ask Animai anything you want about your pet."
+                ></textarea>
+                <Button
+                  variant="ghost"
+                  className="absolute right-0 bottom-0 m-2 group"
+                  isLoading={isLoading}
+                  onClick={(e) => handleSubmit(e)}
+                >
+                  <SendIcon className="text-gray-600 group-hover:text-indigo-500" />
+                </Button>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -247,7 +260,7 @@ const ConversationMessage = ({
                     message.role === "user" ? "text-right" : "text-left"
                   }`}
                 >
-                  {message.content}
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
                 </div>
               </div>
             </div>

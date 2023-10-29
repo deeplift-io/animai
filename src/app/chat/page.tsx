@@ -33,7 +33,6 @@ export default function Page() {
       } else {
         useVisitorStore.getState().setActiveVisitor(visitorData[0]);
         setVisitor(visitorData[0]);
-        console.log("set visitor now");
       }
     };
     getVisitorData();
@@ -73,7 +72,7 @@ export default function Page() {
     fetchUserProfile();
   }, [onboardingComplete]);
 
-  if (!userProfile) {
+  if (!userProfile && visitor) {
     return (
       <>
         <>

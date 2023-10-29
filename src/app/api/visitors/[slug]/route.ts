@@ -22,7 +22,6 @@ export async function PUT(
 ) {
   const slug = params.slug
   const paramsBody = await request.json();
-  console.log('paramsBody', paramsBody);
 
   const visitor = new Visitor(slug);
 

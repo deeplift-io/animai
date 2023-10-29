@@ -1,14 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: [
-    './src/app/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-	],
+  content: ["./src/app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     fontFamily: {
       logo: "var(--font-space-grotesk)",
-      sans: "var(--font-outfit)",
+      sans: "var(--font-work-sans)",
     },
     container: {
       center: true,
@@ -71,9 +68,9 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        'spin-slow': 'spin 5s linear infinite',
+        "spin-slow": "spin 5s linear infinite",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+};

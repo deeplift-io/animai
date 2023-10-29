@@ -6,10 +6,9 @@ import { Toaster } from "react-hot-toast";
 import { HistoryIcon } from "lucide-react";
 import { ConversationsSlideover } from "../(components)/slide-overs/conversations-slideover";
 
-export default async function DashboardLayout({
-  children, // will be a page or nested layout
-}: {
+export default async function DashboardLayout(props: {
   children: React.ReactNode;
+  login: React.ReactNode;
 }) {
   const cookieStore = cookies();
   const supabase = createServerComponentClient<Database>({
@@ -26,8 +25,8 @@ export default async function DashboardLayout({
           <div className="flex h-full max-w-full flex-1 flex-col">
             <MainNav session={session} />
             <div className="flex flex-row h-full max-w-full flex-1">
-              <ConversationsSlideover />
-              <div className="flex h-full max-w-full w-full">{children}</div>
+              <ConversationsSlideover session={session} />
+              <div className="flex h-full max-w-full w-full">{props.children}{props.login}</div>
             </div>
           </div>
         </div>
