@@ -53,7 +53,7 @@ export default function Chat({
   const supabase = createClientComponentClient();
   const router = useRouter();
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({ initialInput: initialPrompt });
+    useChat({ initialInput: initialPrompt, body: {conversationId: conversation?.id} });
   useEffect(() => {
     const fetchAnimalProfile = async () => {
       const {
@@ -108,9 +108,7 @@ export default function Chat({
     handleSubmit(mockEvent);
   };
 
-  const activeMessages = conversation ? conversation.messages : messages;
-
-  console.log("active messages", activeMessages);
+  const activeMessages = [...(conversation?.messages || []), ...(messages || [])];
 
   return (
     <div className="h-full w-full overflow-auto transition-width flex-1">

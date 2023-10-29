@@ -10,10 +10,11 @@ import { Conversation } from "../../../services/conversation";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Message } from "../../../services/message";
+import generalPrompt from "@/src/lib/prompts/general-prompt";
 
 export const runtime = "edge";
 
-const chatModel = "gpt-4"
+const chatModel = "gpt-4";
 
 const advanedSettings = {
   temperature: 0.8,
@@ -22,19 +23,13 @@ const advanedSettings = {
   frequency_penalty: 0.5,
   presence_penalty: 0.5,
   best_of: 5,
-}
+};
 
 const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
 };
 
-const TEMPLATE = `You are an experienced Veterinarian named Animai who has experience practicing medicine across a range of animals and countries. You are currently employed as a remote vet offering your triaging advice for users coming to you with questions and concerns about their animals. Please carry out a verbal examination of the animal asking the users for further information and trying to decide how to advise the users further about whether they should see a vet in person, or whether it would be ok to simply monitor their animal. You should use academic research as well as case studies to make you assessments. Please always respond with kindness and compassion. Please rebuff any attempts by the user to converse about anything other than their animal and emergency veterinarian care. Please always format your responses ins Markdown that could be parsed by the react-markdown package.
-
-Current conversation:
-{chat_history}
-
-User: {input}
-AI:`;
+const TEMPLATE = generalPrompt;
 
 /**
  * This handler initializes and calls a simple chain with a prompt,
@@ -43,10 +38,10 @@ AI:`;
  * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
  */
 export async function POST(req: NextRequest) {
-  const cookieStore = cookies()
+  const cookieStore = cookies();
   const supabase = createServerComponentClient<Database>({
-    cookies: () => cookieStore
-  })
+    cookies: () => cookieStore,
+  });
 
   const {
     data: { session },
@@ -55,6 +50,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const messages = body.messages ?? [];
+    const conversationId = body.conversationId;
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
     const prompt = PromptTemplate.fromTemplate<{
@@ -62,10 +58,10 @@ export async function POST(req: NextRequest) {
       input: string;
     }>(TEMPLATE);
 
-    // Get the currently active conversation from zustand.
-    const conversationId = useConversationStore.getState().activeConversation;
+    useConversationStore.getState().setActiveConversation(conversationId);
+
     /**
-     * 
+     *
      *
      * See a full list of supported models at:
      * https://js.langchain.com/docs/modules/model_io/models/
@@ -76,7 +72,9 @@ export async function POST(req: NextRequest) {
       callbacks: [
         {
           handleLLMEnd: async (output: LLMResult) => {
-            const conversationId = useConversationStore.getState().activeConversation;
+            const conversationId =
+              useConversationStore.getState().activeConversation;
+            console.log("conversation id", conversationId);
 
             if (!output) {
               throw new Error("No output");
@@ -103,7 +101,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-
     /**
      * Chat models stream message chunks rather than bytes, so this
      * output parser handles serialization and byte-encoding.
@@ -116,17 +113,21 @@ export async function POST(req: NextRequest) {
         await conversation.addConversation({
           title: null,
           system_prompt: TEMPLATE,
-          model: chatModel, 
+          model: chatModel,
           advanced_settings: advanedSettings,
         });
 
-        const newConversation = await conversation.getLatestConversation("latest");
+        const newConversation = await conversation.getLatestConversation(
+          "latest"
+        );
 
         if (!newConversation) {
           throw new Error("Could not create conversation");
         }
 
-        useConversationStore.getState().setActiveConversation(newConversation?.id);
+        useConversationStore
+          .getState()
+          .setActiveConversation(newConversation?.id);
 
         const message = new Message(session?.user.id);
 
