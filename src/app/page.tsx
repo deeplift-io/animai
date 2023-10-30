@@ -1,10 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { motion } from "framer-motion";
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function Home() {
+  redirect("/chat");
+
   return (
     <div className="h-screen">
       <motion.div
