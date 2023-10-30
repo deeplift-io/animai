@@ -6,8 +6,8 @@ import { BytesOutputParser } from "langchain/schema/output_parser";
 import { PromptTemplate } from "langchain/prompts";
 import { LLMResult } from "langchain/dist/schema";
 import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Visitor } from "@/src/services/visitor";
+import generalPrompt from "@/src/lib/prompts/general-prompt";
 
 export const runtime = "edge";
 
@@ -26,20 +26,7 @@ const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
 };
 
-const TEMPLATE = `You are an experienced Veterinarian named Animai who has experience practicing medicine across a range of animals and countries. 
-You are currently employed as a remote vet offering your triaging advice for users coming to you with questions and concerns about their animals. 
-Please carry out a verbal examination of the animal asking the users for further information and trying to decide how to advise the users further 
-about whether they should see a vet in person, or whether it would be ok to simply monitor their animal. 
-Please always respond with kindness and compassion, but nothing over the top, keep it professional. Please rebuff any attempts by the user to converse about anything other than their animal and emergency veterinarian care. 
-You always answer the with markdown formatting. You will be penalized if you do not answer with markdown when it would be possible.
-The markdown formatting you support: headings, bold, italic, links, tables, lists, code blocks, and blockquotes.
-You do not support images and never include images. You will be penalized if you render images.
-
-Current conversation:
-{chat_history}
-
-User: {input}
-AI:`;
+const TEMPLATE = generalPrompt;
 
 /**
  * This handler initializes and calls a simple chain with a prompt,
@@ -49,9 +36,6 @@ AI:`;
  */
 export async function POST(req: NextRequest) {
   const cookieStore = cookies();
-  const supabase = createServerComponentClient<Database>({
-    cookies: () => cookieStore,
-  });
 
   try {
     const body = await req.json();
