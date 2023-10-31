@@ -67,7 +67,6 @@ export async function POST(req: NextRequest) {
       callbacks: [
         {
           handleLLMEnd: async (output: LLMResult) => {
-            console.log('visitor data', visitorData[0]);
             await visitor.updateVisitor({
               ...visitorData[0],
               message_allowance: visitorData[0].message_allowance - 1,

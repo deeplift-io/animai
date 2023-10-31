@@ -19,8 +19,6 @@ export default function Page() {
   const [fingerPrintId, setFingerPrintId] = useState(null);
   const {data: visitorData} = useGetVisitorHook(fingerPrintId);
 
-  console.log(visitorData);
-
   useEffect(() => {
     const getVisitorFingerprint = async () => {
       const FingerprintJS = await import("@fingerprintjs/fingerprintjs");
@@ -40,8 +38,6 @@ export default function Page() {
       const newVisitor = await _visitor.addVisitor({
         fingerprint_id: fingerPrintId,
       });
-
-      console.log(newVisitor);
     }
 
     addVisitor();

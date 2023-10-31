@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query"
 
 export const fetchVisitor = async (fingerprintId: string | null) => {
     const res = await fetch(`/api/visitors/${fingerprintId}`);
-    console.log(res.status);
     return res.json();
 };
 

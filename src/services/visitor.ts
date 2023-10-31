@@ -8,7 +8,6 @@ class Visitor {
   }
 
   public async addVisitor(newVisitor: Omit<VisitorType, 'fingerprint_id'>) {
-    console.log('new visitor', newVisitor);
     try {
       const { error, data: visitor } = await supabaseAdminClient
         .from("visitors")
@@ -33,10 +32,6 @@ class Visitor {
       .order("created_at", { ascending: false })
       .limit(1)
       .throwOnError();
-
-      console.log('fingerprint id', this.fingerPrintId);
-
-    console.log("visitor", visitor);
 
     return visitor;
   }
