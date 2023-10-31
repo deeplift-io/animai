@@ -68,8 +68,6 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
     handleSubmit(mockEvent);
   };
 
-  console.log('visitor', visitor);
-
   const userRestricted = visitor.message_allowance < 1;
 
   return (
