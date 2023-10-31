@@ -74,7 +74,6 @@ export async function POST(req: NextRequest) {
           handleLLMEnd: async (output: LLMResult) => {
             const conversationId =
               useConversationStore.getState().activeConversation;
-            console.log("conversation id", conversationId);
 
             if (!output) {
               throw new Error("No output");

@@ -9,7 +9,7 @@ class Visitor {
 
   public async addVisitor(newVisitor: Omit<VisitorType, 'fingerprint_id'>) {
     try {
-      const { error } = await supabaseAdminClient
+      const { error, data: visitor } = await supabaseAdminClient
         .from("visitors")
         .insert({ ...newVisitor })
         .single();
@@ -18,7 +18,7 @@ class Visitor {
         throw new Error(error.message);
       }
 
-      return true;
+      return visitor;
     } catch (e) {
       console.log(`Error adding entry: ${e}`);
     }

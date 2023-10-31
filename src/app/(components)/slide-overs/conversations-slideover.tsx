@@ -33,7 +33,7 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
 
   return (
     <div className="fixed z-10 md:relative h-full">
-      <motion.div
+      {!slideoverOpen && <motion.div
         initial={{ opacity: 0, transform: "translateX(-10px)" }}
         animate={{ opacity: 1, transform: "translateX(0px)" }}
         transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
@@ -45,7 +45,7 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
         >
           <div className="text-2xl">💬</div>
         </Button>
-      </motion.div>
+      </motion.div>}
 
       <AnimatePresence>
         {slideoverOpen && (
@@ -73,7 +73,7 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
               initial="closed"
               animate={{ width: slideoverWidth }}
               exit="closed"
-              className="border-r border-gray-300 absolute z-10 h-full bg-white"
+              className="border-r border-gray-300 absolute z-10 h-full"
             >
               {session ? (
                 <>
@@ -99,7 +99,7 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
                         </div>
                         <div className="px-2 py-1 rounded-lg bg-gray-50 text-gray-800 text-sm mt-2 border border-gray-200 font-medium">No credit card required</div>
                         <div className="pt-6">
-                          <Link href="/chat/login">
+                          <Link href="/sign-in">
                           <Button variant="special">Get started</Button>
                           </Link>
                         </div>

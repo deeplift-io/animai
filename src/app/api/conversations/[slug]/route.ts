@@ -26,8 +26,6 @@ export async function GET(
   const conversation = new Conversation(session?.user.id);
   const conversationData = await conversation.getConversation(slug);
 
-  console.log('conversation id---------------', conversationData);
-
   if (!conversationData) {
     return new Response("Conversation not found", {
       status: 404,
