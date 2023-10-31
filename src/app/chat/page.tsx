@@ -9,34 +9,43 @@ import { useEffect, useState } from "react";
 import { Visitor } from "@/src/services/visitor";
 import { useVisitorStore } from "@/src/lib/stores/visitor-store";
 import ChatCanvasGuest from "../(components)/chat-canvas-guest";
+import LoadingSpinner from "@/components/ui/loading-spinner";
+import { useGetVisitorHook } from "@/src/hooks/useGetVisitorHook";
 
 export default function Page() {
   const [userProfile, setUserProfile] = useState(null);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
   const [visitor, setVisitor] = useState(null);
+  const [fingerPrintId, setFingerPrintId] = useState(null);
+  const {data: visitorData} = useGetVisitorHook(fingerPrintId);
+
+  console.log(visitorData);
 
   useEffect(() => {
-    const getVisitorData = async () => {
+    const getVisitorFingerprint = async () => {
       const FingerprintJS = await import("@fingerprintjs/fingerprintjs");
       const fp = await FingerprintJS.load();
       const result = await fp.get();
-      const visitorId = result.visitorId;
-      const visitor = new Visitor(visitorId);
-      const visitorData = await visitor.getVisitor();
-
-      if (!visitorData || visitorData.length === 0) {
-        const newVisitor = await visitor.addVisitor({
-          fingerprint_id: visitorId,
-        });
-        useVisitorStore.getState().setActiveVisitor(newVisitor);
-        setVisitor(newVisitor);
-      } else {
-        useVisitorStore.getState().setActiveVisitor(visitorData[0]);
-        setVisitor(visitorData[0]);
-      }
+      setFingerPrintId(result.visitorId);
     };
-    getVisitorData();
+    getVisitorFingerprint();
   }, []);
+
+  useEffect(() => {
+    if (!fingerPrintId) return;
+    if (visitorData) return;
+
+    const addVisitor = async () => {
+      const _visitor = new Visitor(fingerPrintId);
+      const newVisitor = await _visitor.addVisitor({
+        fingerprint_id: fingerPrintId,
+      });
+
+      console.log(newVisitor);
+    }
+
+    addVisitor();
+  }, [fingerPrintId]);
 
   const supabase = createClientComponentClient();
 
@@ -72,11 +81,23 @@ export default function Page() {
     fetchUserProfile();
   }, [onboardingComplete]);
 
-  if (!userProfile && visitor) {
+  if (!visitorData) {
+    return (
+      <>
+        <div className="w-full flex flex-col items-center justify-center h-screen">
+          <div className="text-2xl">
+            <LoadingSpinner />
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  if (!userProfile && visitorData) {
     return (
       <>
         <>
-          <ChatCanvasGuest visitor={visitor} />
+          <ChatCanvasGuest visitor={visitorData} />
         </>
       </>
     );

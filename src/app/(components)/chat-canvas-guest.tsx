@@ -47,7 +47,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
 
   const handleStarterPrompt = (prompt) => {
     if (visitor.message_allowance < 1) {
-      router.push("/chat/login");
+      router.push("/sign-in");
       return;
     }
     const promptContent = `${prompt.title} ${prompt.text}`;
@@ -67,6 +67,8 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
     // Call handleSubmit
     handleSubmit(mockEvent);
   };
+
+  console.log('visitor', visitor);
 
   const userRestricted = visitor.message_allowance < 1;
 
@@ -150,7 +152,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                   <div className="flex flex-col justify-center items-center w-full">
                     <div className="text-2xl font-bold text-gray-600">🔒</div>
                     <div className="text-gray-600 text-sm">Message limit reached</div>
-                    <div>Please <Link className="underline" href="/chat/login">sign in</Link> to keep using our service. No credit card required.</div>
+                    <div>Please <Link className="underline" href="/sign-in">sign in</Link> to keep using our service. No credit card required.</div>
                   </div>
                 </div> : 
                 <div className="flex flex-col w-full flex-grow relative border bg-white border-gray-300 focus:border-indigo-700 p-4 rounded-lg">

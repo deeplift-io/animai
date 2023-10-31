@@ -19,10 +19,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  auth,
 }: {
   children: React.ReactNode;
-  auth: React.ReactNode;
 }) {
   return (
     <html
@@ -32,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${outfit.variable} ${worksans.variable} ${inter.variable}`}
       >
-        <Providers>{children}{auth}</Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

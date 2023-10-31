@@ -13,7 +13,10 @@ export async function GET(
   
     const visitorData = await visitor.getVisitor();
 
-    return visitorData;
+    return new Response(JSON.stringify(visitorData[0]), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
 export async function PUT(
