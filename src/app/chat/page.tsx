@@ -11,6 +11,7 @@ import { useVisitorStore } from "@/src/lib/stores/visitor-store";
 import ChatCanvasGuest from "../(components)/chat-canvas-guest";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import { useGetVisitorHook } from "@/src/hooks/useGetVisitorHook";
+import LoadingPulse from "@/components/ui/loading-pulse";
 
 export default function Page() {
   const [userProfile, setUserProfile] = useState(null);
@@ -82,7 +83,7 @@ export default function Page() {
       <>
         <div className="w-full flex flex-col items-center justify-center h-screen">
           <div className="text-2xl">
-            <LoadingSpinner />
+            <LoadingPulse />
           </div>
         </div>
       </>

@@ -117,7 +117,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                           transition={{ delay: i * 0.3 }}
                           key={i}
                         >
-                          <GradientCard>
+                          <GradientCard colors={[ 'bg-gray-50', 'bg-white', 'bg-gray-50' ]}>
                             <div className="font-medium text-sm text-gray-600">
                               {prompt.title}
                             </div>
@@ -190,7 +190,7 @@ const ConversationMessage = ({
   message: any;
 }) => {
   return (
-    <div id="conversation" className="group w-full border-b border-gray-200 hover:bg-slate-50 transition-all">
+    <div id="conversation" className="group w-full border-b border-gray-200 transition-all">
       <div className="p-4 justify-center text-base md:gap-6 md:py-6 m-auto">
         <div
           className={`${

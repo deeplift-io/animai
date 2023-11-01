@@ -15,9 +15,9 @@ export default function GradientCard({
 
   return (
     <div
-      className={`${className} group shadow hover:shadow-lg cursor-pointer relative mx-auto w-full h-full overflow-hidden rounded-[10px] bg-gray-100 p-[1px] transition-all duration-[20000ms] ease-in-out bg-gradient-to-r ${from} ${via} ${to} hover:${from} hover:${via} hover:${to}`}
+      className={`${className} group shadow hover:shadow-lg border border-gray-300 hover: cursor-pointer relative mx-auto w-full h-full overflow-hidden rounded-[10px] bg-gray-100 p-[1px] transition-all duration-[20000ms] ease-in-out bg-gradient-to-r ${from} ${via} ${to} hover:${from} hover:${via} hover:${to}`}
     >
-      <div className="animate-[spin_20s_ease-in-out_infinite] duration-[20000ms] absolute -top-40 -bottom-40 left-10 right-10 bg-gradient-to-r from-transparent via-white/90 to-transparent visible"></div>
+      <div className="animate-[spin_20s_ease-in-out_infinite] duration-1000 absolute -top-40 -bottom-40 left-10 right-10 bg-gradient-to-r from-transparent via-white/90 to-transparent visible"></div>
       <div className="relative rounded-[9px] bg-white p-4">{children}</div>
     </div>
   );

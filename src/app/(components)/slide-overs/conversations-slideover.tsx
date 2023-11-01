@@ -8,6 +8,12 @@ import { formatRelative } from "date-fns";
 import enGB from "date-fns/locale/en-GB";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Session } from "@supabase/supabase-js";
 import Link from "next/link";
 
@@ -26,26 +32,32 @@ const sideVariants = {
   },
 };
 
-export const ConversationsSlideover = ({ session }: { session: Session | null }) => {
+export const ConversationsSlideover = ({
+  session,
+}: {
+  session: Session | null;
+}) => {
   const slideoverWidth = 300;
   const { data: conversations, isLoading } = useConversationHook();
   const [slideoverOpen, setSlideoverOpen] = useState(false);
 
   return (
     <div className="fixed z-10 md:relative h-full">
-      {!slideoverOpen && <motion.div
-        initial={{ opacity: 0, transform: "translateX(-10px)" }}
-        animate={{ opacity: 1, transform: "translateX(0px)" }}
-        transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
-      >
-        <Button
-          variant="outline"
-          className="m-2 z-10 pointer-events-all absolute"
-          onClick={() => setSlideoverOpen(!slideoverOpen)}
+      {!slideoverOpen && (
+        <motion.div
+          initial={{ opacity: 0, transform: "translateX(-10px)" }}
+          animate={{ opacity: 1, transform: "translateX(0px)" }}
+          transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
         >
-          <div className="text-2xl">💬</div>
-        </Button>
-      </motion.div>}
+          <Button
+            variant="ghost"
+            className="m-2 z-10 pointer-events-all absolute"
+            onClick={() => setSlideoverOpen(!slideoverOpen)}
+          >
+            <div className="text-2xl">💬</div>
+          </Button>
+        </motion.div>
+      )}
 
       <AnimatePresence>
         {slideoverOpen && (
@@ -56,7 +68,7 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
           >
             <div>
               <Button
-                variant="outline"
+                variant="ghost"
                 className="px-2 mt-2 z-10 pointer-events-all absolute -right-20"
                 onClick={() => setSlideoverOpen(!slideoverOpen)}
               >
@@ -73,15 +85,13 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
               initial="closed"
               animate={{ width: slideoverWidth }}
               exit="closed"
-              className="border-r border-gray-300 absolute z-10 h-full"
+              className="border-r border-gray-300 absolute z-10 h-full md:bg-transparent bg-gradient-to-b from-transparent via-white to-gray-50"
             >
               {session ? (
                 <>
-                  {conversations && (
-                    <div className="h-full overflow-auto">
-                      <ConversationsList conversations={conversations} />
-                    </div>
-                  )}
+                  <div className="h-full overflow-auto">
+                    <ConversationsList conversations={conversations} />
+                  </div>
                 </>
               ) : (
                 <div className="relative h-full">
@@ -95,12 +105,15 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
                       <div className="flex flex-col items-center">
                         <div className="text-2xl mb-2">👋</div>
                         <div className="text-center text-gray-700">
-                          You&apos;ll  need to make an account to see saved conversations.
+                          You&apos;ll need to make an account to see saved
+                          conversations.
                         </div>
-                        <div className="px-2 py-1 rounded-lg bg-gray-50 text-gray-800 text-sm mt-2 border border-gray-200 font-medium">No credit card required</div>
+                        <div className="px-2 py-1 rounded-lg bg-gray-50 text-gray-800 text-sm mt-2 border border-gray-200 font-medium">
+                          No credit card required
+                        </div>
                         <div className="pt-6">
                           <Link href="/sign-in">
-                          <Button variant="special">Get started</Button>
+                            <Button variant="special">Get started</Button>
                           </Link>
                         </div>
                       </div>
@@ -116,13 +129,21 @@ export const ConversationsSlideover = ({ session }: { session: Session | null })
   );
 };
 
-const ConversationsList = ({ conversations }: Conversation[]) => {
-  if (conversations.length === 0) {
+const ConversationsList = ({
+  conversations,
+}: {
+  conversations: Conversation[] | null;
+}) => {
+  if (!conversations || conversations.length === 0) {
     return (
-      <div className="flex flex-col items-center h-full">
-        <div className="text-2xl text-slate-500">No conversations yet</div>
-        <div className="text-sm text-slate-400">
-          Select an animal to talk about or ask any question you like
+      <div className="flex flex-col items-center h-full justify-center">
+        <div className="px-8">
+          <div className="flex flex-col items-center">
+            <div className="text-2xl mb-2">🪹</div>
+            <div className="text-center text-gray-700">
+              No saved conversations yet
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -155,10 +176,16 @@ const ConversationsList = ({ conversations }: Conversation[]) => {
 
   return Object.entries(groupedConversations).map(([date, conversations]) => (
     <div key={date}>
-      <div className="text-xs upper text-black ml-2 my-2 sticky top-1 bg-slate-300 bg-opacity-20 backdrop-blur-lg py-2 px-2 rounded-xl m-2 border border-gray-100">{date}</div>
+      <div className="text-xs upper text-black ml-2 my-2 sticky top-1 bg-white bg-opacity-40 backdrop-blur-lg py-2 px-2 rounded-lg m-2 border border-gray-300">
+        {date}
+      </div>
       {conversations.map((conversation) => (
-        <Link href={`/chat/${conversation.id}`} className="flex flex-col overflow-auto mx-2" key={conversation.id}>
-          <div className="flex flex-row items-center py-3 rounded-xl cursor-pointer hover:bg-slate-50 hover:border-slate-200 border border-white">
+        <Link
+          href={`/chat/${conversation.id}`}
+          className="flex flex-col overflow-auto mx-2 my-1"
+          key={conversation.id}
+        >
+          <div className="flex flex-row items-center py-3 rounded-lg cursor-pointer bg-white hover:bg-slate-50 hover:border-slate-200 border border-gray-300">
             <div className="ml-2 text-sm text-gray-700">
               {conversation.title ? conversation.title : "New conversation"}
             </div>
