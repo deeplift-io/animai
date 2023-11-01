@@ -10,6 +10,7 @@ specifiers:
   '@radix-ui/react-label': ^2.0.2
   '@radix-ui/react-popover': ^1.0.6
   '@radix-ui/react-slot': ^1.0.2
+  '@radix-ui/react-tooltip': ^1.0.7
   '@radix-ui/themes': ^1.0.0
   '@splinetool/react-spline': ^2.2.6
   '@splinetool/runtime': ^0.9.393
@@ -73,6 +74,7 @@ dependencies:
   '@radix-ui/react-label': 2.0.2_3xleytyzprlgycb2ded54tx72i
   '@radix-ui/react-popover': 1.0.6_3xleytyzprlgycb2ded54tx72i
   '@radix-ui/react-slot': 1.0.2_pmekkgnqduwlme35zpnqhenc34
+  '@radix-ui/react-tooltip': 1.0.7_3xleytyzprlgycb2ded54tx72i
   '@radix-ui/themes': 1.0.0_3xleytyzprlgycb2ded54tx72i
   '@splinetool/react-spline': 2.2.6_3qm4ghkd6hxfywxefq25uiehni
   '@splinetool/runtime': 0.9.425

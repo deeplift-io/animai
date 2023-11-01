@@ -14,6 +14,7 @@ import { SendIcon } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Conversation } from "@/src/lib/types";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 const starterPrompts = [
   {
@@ -157,7 +158,7 @@ export default function Chat({
                           transition={{ delay: i * 0.3 }}
                           key={i}
                         >
-                          <GradientCard>
+                          <GradientCard colors={[ 'bg-gray-50', 'bg-white', 'bg-gray-50' ]}>
                             <div className="font-medium text-sm text-gray-600">
                               {prompt.title}
                             </div>
@@ -184,13 +185,14 @@ export default function Chat({
         >
           <div className="relative flex h-full flex-1 items-stretch md:flex-col">
             <div className="flex w-full items-center flex-col">
-              <div className="flex flex-col w-full flex-grow relative border bg-white border-gray-300 focus:border-indigo-700 p-4 rounded-lg">
+              <div className="flex flex-col w-full flex-grow shadow relative border bg-white border-gray-300 focus:border-indigo-700 p-4 rounded-lg">
                 <textarea
                   id="prompt-textarea"
                   className="ring-0 outline-none w-full h-full resize-none rounded-lg border-white bg-transparent"
                   autoFocus
                   value={input}
                   onChange={handleInputChange}
+                  disabled={isLoading}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       handleSubmit(e);
@@ -198,14 +200,14 @@ export default function Chat({
                   }}
                   placeholder="Ask Animai anything you want about your pet."
                 ></textarea>
-                <Button
+                {isLoading ? <div className="absolute right-0 bottom-0 py-4 px-2"><LoadingSpinner color="text-gray-600" /></div> : <Button
                   variant="ghost"
                   className="absolute right-0 bottom-0 m-2 group"
                   isLoading={isLoading}
                   onClick={(e) => handleSubmit(e)}
                 >
                   <SendIcon className="text-gray-600 group-hover:text-indigo-500" />
-                </Button>
+                </Button>}
               </div>
             </div>
           </div>
@@ -223,7 +225,7 @@ const ConversationMessage = ({
   profile: any;
 }) => {
   return (
-    <div id="conversation" className="group w-full border-b border-gray-200">
+    <div id="conversation" className="group w-full border-b border-gray-300">
       <div className="p-4 justify-center text-base md:gap-6 md:py-6 m-auto">
         <div
           className={`${
