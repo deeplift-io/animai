@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Session } from "@supabase/supabase-js";
 import Link from "next/link";
+import { Pencil2Icon, TriangleDownIcon } from "@radix-ui/react-icons";
 
 const sideVariants = {
   closed: {
@@ -85,42 +86,59 @@ export const ConversationsSlideover = ({
               initial="closed"
               animate={{ width: slideoverWidth }}
               exit="closed"
-              className="border-r border-gray-300 absolute z-10 h-full md:bg-transparent bg-gradient-to-b from-transparent via-white to-gray-50"
+              className="z-10 h-full rounded-lg relative p-2"
             >
-              {session ? (
-                <>
-                  <div className="h-full overflow-auto">
-                    <ConversationsList conversations={conversations} />
-                  </div>
-                </>
-              ) : (
-                <div className="relative h-full">
-                  <motion.div
-                    initial={{ opacity: 0, transform: "translateX(-10px)" }}
-                    animate={{ opacity: 1, transform: "translateX(0px)" }}
-                    transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
-                    className="absolute top-1/3"
-                  >
-                    <div className="px-8">
-                      <div className="flex flex-col items-center">
-                        <div className="text-2xl mb-2">👋</div>
-                        <div className="text-center text-gray-700">
-                          You&apos;ll need to make an account to see saved
-                          conversations.
-                        </div>
-                        <div className="px-2 py-1 rounded-lg bg-gray-50 text-gray-800 text-sm mt-2 border border-gray-200 font-medium">
-                          No credit card required
-                        </div>
-                        <div className="pt-6">
-                          <Link href="/sign-in">
-                            <Button variant="special">Get started</Button>
+              <div className="bg-white rounded-xl shadow-lg h-[90%] border border-gray-300">
+                {/* <div className="absolute blur-3xl opacity-40 -top-6 left-0 bg-gradient-to-b from-indigo-500 to-blue-500 rounded-full w-full h-24"></div> */}
+                {session ? (
+                  <>
+                    <div className="h-full overflow-auto">
+                      <div className="inline-flex justify-between items-center w-full px-3 py-1 text-gray-900">
+                        <div className="text-sm">Conversations</div>
+                        <div>
+                          <Link href="/chat">
+                          <Button size="icon" variant="ghost">
+                            <Pencil2Icon className="h-4 w-4" />
+                          </Button>
                           </Link>
                         </div>
                       </div>
+                      <ConversationsList conversations={conversations} />
                     </div>
-                  </motion.div>
-                </div>
-              )}
+                  </>
+                ) : (
+                  <div className="relative h-full">
+                    <motion.div
+                      initial={{ opacity: 0, transform: "translateX(-10px)" }}
+                      animate={{ opacity: 1, transform: "translateX(0px)" }}
+                      transition={{
+                        delay: 0.3,
+                        type: "spring",
+                        stiffness: 100,
+                      }}
+                      className="absolute top-1/3"
+                    >
+                      <div className="px-8">
+                        <div className="flex flex-col items-center">
+                          <div className="text-2xl mb-2">👋</div>
+                          <div className="text-center text-gray-700">
+                            You&apos;ll need to make an account to see saved
+                            conversations.
+                          </div>
+                          <div className="px-2 py-1 rounded-lg bg-gray-50 text-gray-800 text-sm mt-2 border border-gray-200 font-medium">
+                            No credit card required
+                          </div>
+                          <div className="pt-6">
+                            <Link href="/sign-in">
+                              <Button variant="special">Get started</Button>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                )}
+              </div>
             </motion.div>
           </motion.aside>
         )}
@@ -176,8 +194,13 @@ const ConversationsList = ({
 
   return Object.entries(groupedConversations).map(([date, conversations]) => (
     <div key={date}>
-      <div className="text-xs upper text-black ml-2 my-2 sticky top-1 bg-white bg-opacity-40 backdrop-blur-lg py-2 px-2 rounded-lg m-2 border border-gray-300">
-        {date}
+      <div className="text-xs upper text-black ml-2 my-2 sticky top-1 bg-gray-200 bg-opacity-40 backdrop-blur-lg py-2 px-2 rounded-lg m-2 border border-gray-300">
+        <div className="inline-flex justify-between items-center w-full">
+          <div>{date}</div>
+          <div>
+            <TriangleDownIcon />
+          </div>
+        </div>
       </div>
       {conversations.map((conversation) => (
         <Link

@@ -12,6 +12,7 @@ import GradientCard from "@/components/ui/gradient-card";
 import {  SendIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ConversationMessage from "./conversation-message";
 
 const starterPrompts = [
   {
@@ -82,7 +83,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                   message={message}
                 />
               ))}
-              <div className="h-[10rem] md:h-48 flex-shrink-0"></div>
+              <div className=" md:h-[13rem] h-[11rem] flex-shrink-0"></div>
             </div>}
             {messages.length === 0 && (
               <motion.div
@@ -93,14 +94,14 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                 className="flex flex-col items-center h-full"
               >
                 <div className="flex flex-col items-center px-2 md:px-0 h-full pt-12 md:pt-32">
-                  <div className="text-3xl text-slate-700 pb-4">
+                  <div className="text-xl  md:text-3xl text-slate-700 pb-4">
                     Welcome to{" "}
                     <span className="font-logo font-medium">Animai</span>
                   </div>
-                  <div className="max-w-md text-center text-slate-600 text-xl pb-12">
+                  <div className="max-w-md text-center text-slate-600 md:text-xl pb-6 md:pb-12">
                     {`If you're worried about your pet, you're in the right place. Describe the issue, and I'll provide guidance.`}
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 px-2 md:px-0 max-w-2xl w-full">
+                  <div className="grid grid-cols-2 gap-4 pb-4 px-2 md:px-0 max-w-2xl w-full">
                     {starterPrompts.map((prompt, i) => {
                       return (
                         <motion.div
@@ -144,7 +145,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
         >
           <div className="relative flex h-full flex-1 items-stretch md:flex-col">
             <div className="flex w-full items-center flex-col">
-            <div className="mb-2 bg-gradient-to-bl from-indigo-800 via-indigo-700 to-indigo-800 px-2 text-indigo-50 rounded-full self-start shadow shadow-indigo-100 border border-indigo-500">{visitor?.message_allowance} messages remaining</div>
+            <div className="mb-2 bg-gradient-to-bl from-indigo-800 via-indigo-700 to-indigo-800 px-2 text-indigo-50 rounded-full self-start shadow shadow-indigo-100 border border-indigo-500 text-sm md:text-base">{visitor?.message_allowance} messages remaining</div>
                 {userRestricted ?
                 <div className="flex flex-col w-full flex-grow relative border bg-slate-50 border-gray-300 focus:border-indigo-700 p-4 rounded-lg">
                   <div className="flex flex-col justify-center items-center w-full">
@@ -153,10 +154,10 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                     <div>Please <Link className="underline" href="/sign-in">sign in</Link> to keep using our service. No credit card required.</div>
                   </div>
                 </div> : 
-                <div className="flex flex-col w-full flex-grow relative border bg-white border-gray-300 focus:border-indigo-700 p-4 rounded-lg">
+                <div className="flex flex-col w-full flex-grow relative border bg-white border-gray-300 focus:border-indigo-700 p-2 md:p-4 rounded-lg">
                   <textarea
                     id="prompt-textarea"
-                    className="ring-0 outline-none w-full h-full resize-none rounded-lg border-white bg-transparent"
+                    className="ring-0 outline-none w-full h-full resize-none rounded-lg border-white bg-transparent text-sm md:text-base"
                     autoFocus
                     value={input}
                     onChange={handleInputChange}
@@ -169,7 +170,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                   ></textarea>
                   <Button
                     variant="ghost"
-                    className="absolute right-0 bottom-0 m-2 group"
+                    className="absolute right-0 bottom-0 md:m-2 group"
                     isLoading={isLoading}
                     onClick={(e) => handleSubmit(e)}
                   >
@@ -183,55 +184,3 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
     </div>
   );
 }
-
-const ConversationMessage = ({
-  message,
-}: {
-  message: any;
-}) => {
-  return (
-    <div id="conversation" className="group w-full border-b border-gray-200 transition-all">
-      <div className="p-4 justify-center text-base md:gap-6 md:py-6 m-auto">
-        <div
-          className={`${
-            message.role === "user" ? "md:flex-row-reverse" : "md:flex-row"
-          } flex flex-1 flex-col gap-4 text-base mx-auto md:gap-6 md:max-w-2xl lg:max-w-[38rem] xl:max-w-3xl`}
-        >
-          <div className="flex-shrink-0 flex flex-col relative items-start md:items-end">
-            <div className="w-full">
-              <div
-                className={`flex flex-row sticky top-0 ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                {message.role === "user" ? (
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-teal-200 to-lime-200 border border-emerald-200" />
-                ) : (
-                  <Avatar>
-                    <AvatarFallback name={message.name} />
-                    <AvatarImage src="/logo/Favicon.svg" />
-                  </Avatar>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 gizmo:w-full md:gap-3 lg:w-[calc(100%-115px)] gizmo:text-gizmo-gray-600 gizmo:dark:text-gray-300">
-            <div className="flex flex-grow flex-col gap-3 max-w-full">
-              <div
-                className={`min-h-[20px] flex flex-col gap-3 overflow-x-auto whitespace-pre-wrap break-words`}
-              >
-                <div
-                  className={`${
-                    message.role === "user" ? "text-right" : "text-left"
-                  }`}
-                >
-                  <Markdown>{message.content}</Markdown>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};

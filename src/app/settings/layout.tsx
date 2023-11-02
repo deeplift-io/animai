@@ -44,7 +44,7 @@ export default async function DashboardLayout(props: {
             <div className="flex flex-col h-full max-w-full flex-1">
               <PageHeading items={MenuItems}>Settings</PageHeading>
               <div className="w-full border-b border-gray-200"></div>
-              <div className="flex h-full max-w-screen-md mx-auto w-full">
+              <div className="flex h-full max-w-screen-md mx-auto w-full py-12">
                 {props.children}
               </div>
             </div>

@@ -15,6 +15,7 @@ import ReactMarkdown from "react-markdown";
 import { Conversation } from "@/src/lib/types";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import ConversationMessage from "./conversation-message";
 
 const starterPrompts = [
   {
@@ -137,7 +138,7 @@ export default function Chat({
                 className="flex flex-col items-center h-full"
               >
                 <div className="flex flex-col items-center justify-center px-2 md:px-0 h-full">
-                  <div className="text-2xl text-slate-700">Welcome back!</div>
+                  <div className="text-lg md:text-2xl text-slate-700">Welcome back!</div>
                   <div className="max-w-md text-center text-gray-400 pb-8">
                     {`If you're worried about your pet, you're in the right place. Describe the issue, and I'll provide guidance.`}
                   </div>
@@ -216,57 +217,3 @@ export default function Chat({
     </div>
   );
 }
-
-const ConversationMessage = ({
-  message,
-  profile,
-}: {
-  message: any;
-  profile: any;
-}) => {
-  return (
-    <div id="conversation" className="group w-full border-b border-gray-300">
-      <div className="p-4 justify-center text-base md:gap-6 md:py-6 m-auto">
-        <div
-          className={`${
-            message.role === "user" ? "md:flex-row-reverse" : "md:flex-row"
-          } flex flex-1 flex-col gap-4 text-base mx-auto md:gap-6 md:max-w-2xl lg:max-w-[38rem] xl:max-w-3xl`}
-        >
-          <div className="flex-shrink-0 flex flex-col relative items-start md:items-end">
-            <div className="w-full">
-              <div
-                className={`flex flex-row sticky ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                {message.role === "user" ? (
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-teal-200 to-lime-200 border border-emerald-200" />
-                ) : (
-                  <Avatar>
-                    <AvatarFallback name={message.name} />
-                    <AvatarImage src="/logo/Favicon.svg" />
-                  </Avatar>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 gizmo:w-full md:gap-3 lg:w-[calc(100%-115px)] gizmo:text-gizmo-gray-600 gizmo:dark:text-gray-300">
-            <div className="flex flex-grow flex-col gap-3 max-w-full">
-              <div
-                className={`min-h-[20px] flex flex-col gap-3 overflow-x-auto whitespace-pre-wrap break-words`}
-              >
-                <div
-                  className={`${
-                    message.role === "user" ? "text-right" : "text-left"
-                  }`}
-                >
-                  <ReactMarkdown>{message.content}</ReactMarkdown>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
