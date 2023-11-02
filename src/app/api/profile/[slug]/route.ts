@@ -14,8 +14,6 @@ export async function GET(
 
     const profileData = await profile.getProfile();
 
-    console.log('profile data', profileData);
-
     return new Response(JSON.stringify(profileData[0]), {
       status: 200,
       headers: { "Content-Type": "application/json" },
