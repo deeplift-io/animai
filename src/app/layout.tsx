@@ -1,16 +1,20 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Outfit, Space_Grotesk } from "next/font/google";
+import { Inter, Outfit, Space_Grotesk, Work_Sans } from "next/font/google";
+import Providers from "./providers";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
 });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const worksans = Work_Sans({ subsets: ["latin"], variable: "--font-work-sans" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "Animai | The vet in your pocket",
-  description: "Our AI powered app helps you take care of your pets.",
+  description: "Get helpful, accurate assistance with your pet's health and well being.",
 };
 
 export default function RootLayout({
@@ -21,12 +25,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${spaceGrotesk.variable} font-light`}
+      className={`${outfit.variable} ${spaceGrotesk.variable} ${worksans.variable} ${inter.variable}`}
     >
       <body
-        className={`${spaceGrotesk.variable} ${outfit.variable} bg-gradient-to-b from-slate-50 to-gray-100 overflow-hidden`}
+        className={`${spaceGrotesk.variable} ${outfit.variable} ${worksans.variable} ${inter.variable}`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
