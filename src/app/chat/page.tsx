@@ -82,8 +82,8 @@ export default function Page() {
     return (
       <>
         <div className="w-full flex flex-col items-center justify-center h-screen">
-          <div className="text-2xl">
-            <LoadingPulse />
+          <div className="text-6xl">
+            <LoadingSpinner color="text-gray-600" size="md" />
           </div>
         </div>
       </>

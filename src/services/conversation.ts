@@ -60,7 +60,6 @@ class Conversation {
         .single();
 
       if (error) {
-        console.log("error made it");
         console.log(`Error fetching conversation: ${error.message}`);
         return null;
       }

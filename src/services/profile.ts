@@ -17,6 +17,19 @@ class Profile {
     return profile;
   }
 
+  public async updateProfile(profileData: any): Promise<any> {
+    const { data: updatedProfile, error } = await supabaseAdminClient
+      .from("profiles")
+      .update(profileData)
+      .eq("id", this.userId)
+      .throwOnError();
+
+    if (error) {
+      throw error;
+    }
+
+    return updatedProfile;
+  }
 }
 
 export { Profile };
