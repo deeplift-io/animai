@@ -41,7 +41,7 @@ export default async function DashboardLayout(props: {
         <div className="relative flex h-full max-w-full flex-1 overflow-hidden">
           <div className="flex h-full max-w-full flex-1 flex-col">
             <MainNav session={session} />
-            <div className="flex flex-col h-full max-w-full flex-1">
+            <div className="flex flex-col h-full max-w-full flex-1 pt-12 overflow-auto">
               <PageHeading items={MenuItems}>Settings</PageHeading>
               <div className="w-full border-b border-gray-200"></div>
               <div className="flex h-full max-w-screen-md mx-auto w-full py-12">

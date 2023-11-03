@@ -6,8 +6,8 @@ export const fetchProfile = async (userId: string | null) => {
 };
 
 /**
- * Use this hook to get the visitor by fingerprint id.
- * @param fingerPrintId 
+ * Use this hook to get the visitor by  userId.
+ * @param userId 
  * @returns 
  */
 export const useGetAuthProfileHook = (userId: string | null) => {

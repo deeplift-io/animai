@@ -2,21 +2,14 @@
 
 import { useConversationHook } from "@/src/hooks/useConversationsHook";
 import { Conversation } from "@/src/lib/types";
-import { History, HistoryIcon, MoveLeftIcon } from "lucide-react";
+import { History, HistoryIcon, LucideChevronDown, MoveLeftIcon, PenSquare, PencilIcon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatRelative } from "date-fns";
 import enGB from "date-fns/locale/en-GB";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Session } from "@supabase/supabase-js";
 import Link from "next/link";
-import { Pencil2Icon, TriangleDownIcon } from "@radix-ui/react-icons";
 
 const sideVariants = {
   closed: {
@@ -92,13 +85,13 @@ export const ConversationsSlideover = ({
                 {/* <div className="absolute blur-3xl opacity-40 -top-6 left-0 bg-gradient-to-b from-indigo-500 to-blue-500 rounded-full w-full h-24"></div> */}
                 {session ? (
                   <>
-                    <div className="h-full overflow-auto">
+                    <div className="h-full overflow-auto no-scrollbar">
                       <div className="inline-flex justify-between items-center w-full px-3 py-1 text-gray-900">
-                        <div className="text-sm">Conversations</div>
+                        <div className="text-sm font-medium">Conversations</div>
                         <div>
                           <Link href="/chat">
                           <Button size="icon" variant="ghost">
-                            <Pencil2Icon className="h-4 w-4" />
+                            <PenSquare className="h-5 w-5 text-gray-700" />
                           </Button>
                           </Link>
                         </div>
@@ -198,7 +191,7 @@ const ConversationsList = ({
         <div className="inline-flex justify-between items-center w-full">
           <div>{date}</div>
           <div>
-            <TriangleDownIcon />
+            <LucideChevronDown />
           </div>
         </div>
       </div>

@@ -19,3 +19,17 @@ export async function GET(
       headers: { "Content-Type": "application/json" },
     });
   }
+
+  export async function PUT(
+    request: Request,
+    { params }: { params: { slug: string } }
+  ) {
+    const slug = params.slug
+    const paramsBody = await request.json();
+  
+    const profile = new Profile(slug);
+  
+    const profileData = await profile.updateProfile(paramsBody);
+  
+    return profileData;
+  }

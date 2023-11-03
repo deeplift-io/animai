@@ -170,6 +170,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                   ></textarea>
                   <Button
                     variant="ghost"
+                    size="icon"
                     className="absolute right-0 bottom-0 md:m-2 group"
                     isLoading={isLoading}
                     onClick={(e) => handleSubmit(e)}

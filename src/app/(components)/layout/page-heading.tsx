@@ -12,7 +12,8 @@ export const PageHeading = (props: { children: React.ReactNode; items: {
         return href === pathname;
     };
   return (
-    <div className="w-full max-w-screen-md mx-auto py-8 flex flex-col">
+    <div className="sticky z-10 top-0 backdrop-blur-sm w-full mx-auto py-8 flex flex-col md:px-0 px-2">
+      <div className="mx-auto max-w-screen-md w-full">
       <h1 className="md:text-3xl text-xl font-medium text-gray-900">
         {props.children}
       </h1>
@@ -24,6 +25,7 @@ export const PageHeading = (props: { children: React.ReactNode; items: {
             </PageHeadingItem>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -203,6 +203,7 @@ export default function Chat({
                 ></textarea>
                 {isLoading ? <div className="absolute right-0 bottom-0 py-4 px-2"><LoadingSpinner color="text-gray-600" /></div> : <Button
                   variant="ghost"
+                  size="icon"
                   className="absolute right-0 bottom-0 m-2 group"
                   isLoading={isLoading}
                   onClick={(e) => handleSubmit(e)}

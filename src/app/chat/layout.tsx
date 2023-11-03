@@ -22,7 +22,7 @@ export default async function DashboardLayout(props: {
         <div className="relative flex h-full max-w-full flex-1 overflow-hidden">
           <div className="flex h-full max-w-full flex-1 flex-col">
             <MainNav session={session} />
-            <div className="flex flex-row h-full max-w-full flex-1">
+            <div className="flex flex-row h-full max-w-full flex-1 pt-12">
               <ConversationsSlideover session={session} />
               <div className="flex h-full max-w-full w-full">{props.children}</div>
             </div>
