@@ -6,10 +6,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ScrollToBottom from "react-scroll-to-bottom";
-import Markdown from 'react-markdown'
+import Markdown from "react-markdown";
 
 import GradientCard from "@/components/ui/gradient-card";
-import {  SendIcon } from "lucide-react";
+import { SendIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ConversationMessage from "./conversation-message";
@@ -44,7 +44,11 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
   const router = useRouter();
   const [initialPrompt, setInitialPrompt] = useState("");
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({ initialInput: initialPrompt, api: "/api/chat-guest", body: { visitor: visitor } });
+    useChat({
+      initialInput: initialPrompt,
+      api: "/api/chat-guest",
+      body: { visitor: visitor },
+    });
 
   const handleStarterPrompt = (prompt) => {
     if (visitor.message_allowance < 1) {
@@ -76,15 +80,14 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
       <div className="flex h-full">
         <div className="flex-1 overflow-hidden">
           <ScrollToBottom className="h-full no-scrollbar">
-            {messages.length > 0 && <div className="flex flex-col">
-              {messages.map((message) => (
-                <ConversationMessage
-                  key={message.id}
-                  message={message}
-                />
-              ))}
-              <div className=" md:h-[13rem] h-[11rem] flex-shrink-0"></div>
-            </div>}
+            {messages.length > 0 && (
+              <div className="flex flex-col">
+                {messages.map((message) => (
+                  <ConversationMessage key={message.id} message={message} />
+                ))}
+                <div className=" md:h-[13rem] h-[11rem] flex-shrink-0"></div>
+              </div>
+            )}
             {messages.length === 0 && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -101,7 +104,7 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                   <div className="max-w-md text-center text-slate-600 md:text-xl pb-6 md:pb-12">
                     {`If you're worried about your pet, you're in the right place. Describe the issue, and I'll provide guidance.`}
                   </div>
-                  <div className="grid grid-cols-2 gap-4 pb-4 px-2 md:px-0 max-w-2xl w-full">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 px-2 md:px-0 max-w-2xl w-full">
                     {starterPrompts.map((prompt, i) => {
                       return (
                         <motion.div
@@ -118,7 +121,9 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                           transition={{ delay: i * 0.3 }}
                           key={i}
                         >
-                          <GradientCard colors={[ 'bg-gray-50', 'bg-white', 'bg-gray-50' ]}>
+                          <GradientCard
+                            colors={["bg-gray-50", "bg-white", "bg-gray-50"]}
+                          >
                             <div className="font-medium text-sm text-gray-600">
                               {prompt.title}
                             </div>
@@ -145,15 +150,27 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
         >
           <div className="relative flex h-full flex-1 items-stretch md:flex-col">
             <div className="flex w-full items-center flex-col">
-            <div className="mb-2 bg-gradient-to-bl from-indigo-800 via-indigo-700 to-indigo-800 px-2 text-indigo-50 rounded-full self-start shadow shadow-indigo-100 border border-indigo-500 text-sm md:text-base">{visitor?.message_allowance} messages remaining</div>
-                {userRestricted ?
+              <div className="mb-2 bg-gradient-to-bl from-indigo-800 via-indigo-600 to-indigo-800 px-2 text-indigo-50 rounded-full self-start shadow shadow-indigo-100 border border-indigo-500 text-sm md:text-base">
+                {visitor?.message_allowance} message
+                {visitor?.message_allowance?.length === 1 ? "4" : "s"} remaining
+              </div>
+              {userRestricted ? (
                 <div className="flex flex-col w-full flex-grow relative border bg-slate-50 border-gray-300 focus:border-indigo-700 p-4 rounded-lg">
                   <div className="flex flex-col justify-center items-center w-full">
                     <div className="text-2xl font-bold text-gray-600">🔒</div>
-                    <div className="text-gray-600 text-sm">Message limit reached</div>
-                    <div>Please <Link className="underline" href="/sign-in">sign in</Link> to keep using our service. No credit card required.</div>
+                    <div className="text-gray-600 text-sm">
+                      Message limit reached
+                    </div>
+                    <div>
+                      Please{" "}
+                      <Link className="underline" href="/sign-in">
+                        sign in
+                      </Link>{" "}
+                      to keep using our service. No credit card required.
+                    </div>
                   </div>
-                </div> : 
+                </div>
+              ) : (
                 <div className="flex flex-col w-full flex-grow relative border bg-white border-gray-300 focus:border-indigo-700 p-2 md:p-4 rounded-lg">
                   <textarea
                     id="prompt-textarea"
@@ -177,7 +194,8 @@ export default function ChatCanvasGuest({ visitor }: { visitor: string }) {
                   >
                     <SendIcon className="text-gray-600 group-hover:text-indigo-500" />
                   </Button>
-                </div>}
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
