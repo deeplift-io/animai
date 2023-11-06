@@ -1,19 +1,14 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useChat } from "ai/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ScrollToBottom from "react-scroll-to-bottom";
 import GradientCard from "@/components/ui/gradient-card";
 import { SendIcon } from "lucide-react";
-import ReactMarkdown from "react-markdown";
 import { Conversation } from "@/src/lib/types";
-import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import ConversationMessage from "./conversation-message";
 import { useGetAuthProfileHook } from "@/src/hooks/useGetAuthProfileHook";
