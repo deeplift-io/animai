@@ -35,8 +35,6 @@ const TEMPLATE = generalPrompt;
  * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
  */
 export async function POST(req: NextRequest) {
-  const cookieStore = cookies();
-
   try {
     const body = await req.json();
     const messages = body.messages ?? [];
@@ -67,9 +65,11 @@ export async function POST(req: NextRequest) {
       callbacks: [
         {
           handleLLMEnd: async (output: LLMResult) => {
+            const conversationBlob = createConversationBlob(messages, output.generations[0][0].text);
             await visitor.updateVisitor({
               ...visitorData[0],
               message_allowance: visitorData[0].message_allowance - 1,
+              conversation_blob: conversationBlob,
             });
           },
         },
@@ -91,5 +91,17 @@ export async function POST(req: NextRequest) {
     return new StreamingTextResponse(stream);
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
+
+const createConversationBlob = (messages: any[], appended: any) => {
+  try {
+    const newMessages = messages.concat({
+      content: appended,
+      role: "ai",
+    });
+    return newMessages;
+  } catch (error) {
+    console.error('Error creating JSON string:', error);
   }
 }

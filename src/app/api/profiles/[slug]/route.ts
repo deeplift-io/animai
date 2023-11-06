@@ -14,9 +14,25 @@ export async function GET(
 
     const profileData = await profile.getProfile();
 
-    console.log('profile data', profileData);
-
     return new Response(JSON.stringify(profileData[0]), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  export async function PUT(
+    request: Request,
+    { params }: { params: { slug: string } }
+  ) {
+    const slug = params.slug
+    const paramsBody = await request.json();
+  
+    console.log('params body', paramsBody);
+    const profile = new Profile(slug);
+  
+    const profileData = await profile.updateProfile(paramsBody);
+  
+    return new Response(JSON.stringify(profileData), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

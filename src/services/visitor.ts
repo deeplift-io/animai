@@ -37,6 +37,7 @@ class Visitor {
   }
 
   public async updateVisitor(newVisitor: Omit<VisitorType, 'fingerprint_id'>) {
+    console.log('new visitor', newVisitor)
     const { data: visitor, error } = await supabaseAdminClient
       .from("visitors")
       .update({ ...newVisitor })

@@ -1,9 +1,29 @@
 import * as React from "react";
 
-const LoadingSpinner = ({ color = 'text-white' }: {color: string | null}) => {
+interface Size {
+  sm: string;
+  md: string;
+  lg: string;
+}
+
+const LoadingSpinner = ({
+  color = "text-white",
+  size = "sm",
+}: {
+  color: string | null;
+  size: Size;
+}) => {
+  const sizeMap = {
+    sm: "h-3.5 w-3.5",
+    md: "h-5 w-5",
+    lg: "h-7 w-7",
+  };
+
+  const sizeClass = sizeMap[size];
+  
   return (
     <svg
-      className={`animate-spin -ml-1 mr-3 h-3.5 w-3.5 ${color}`}
+      className={`animate-spin ${sizeClass} ${color}`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
