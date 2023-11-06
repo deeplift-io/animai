@@ -30,5 +30,8 @@ export async function PUT(
 
   const visitorData = await visitor.updateVisitor(paramsBody);
 
-  return visitorData;
+  return new Response(JSON.stringify(visitorData), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 }

@@ -53,7 +53,7 @@ export default function MainNav({ session }: { session: Session | null }) {
         </Link>
         <div className="inline-flex space-x-2 items-center">
           <LinkItem href="/animals/create"><div><PlusCircle className="w-4 h-4" /></div><div>Add animal</div></LinkItem>
-          <LinkItem href="/animals/create"><div><SearchIcon className="w-4 h-4" /></div><div>Search</div></LinkItem>
+          {/* <LinkItem href="/animals/create"><div><SearchIcon className="w-4 h-4" /></div><div>Search</div></LinkItem> */}
           <AvatarDropdownMenu session={session} />
         </div>
       </nav>

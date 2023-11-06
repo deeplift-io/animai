@@ -18,6 +18,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { SaveIcon, UserPlus2 } from "lucide-react";
 import { UpdateIcon } from "@radix-ui/react-icons";
+import { useMutation } from "@tanstack/react-query";
+import { useUpdateProfileHook } from "@/src/hooks/useUpdateProfileHook";
+import { m } from "framer-motion";
+import LoadingSpinner from "@/components/ui/loading-spinner";
+import toast from "react-hot-toast";
 
 interface UpdateProfileFormProps {
   values: {
@@ -25,6 +30,7 @@ interface UpdateProfileFormProps {
     name?: string;
     bio?: string;
   };
+  userId: string;
 }
 
 
@@ -40,17 +46,21 @@ const formSchema = z.object({
   }),
 });
 
-export function UpdateProfileForm({values}: UpdateProfileFormProps) {
+export function UpdateProfileForm({values, userId}: UpdateProfileFormProps) {
+  const {mutate, isLoading} = useUpdateProfileHook(userId);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: values,
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
+    try {
+      mutate(values);
+      toast.success('Profile updated successfully')
+    } catch (error) {
+      console.log('error', error);
+    }
   }
   return (
     <Form {...form}>
@@ -80,7 +90,6 @@ export function UpdateProfileForm({values}: UpdateProfileFormProps) {
               <FormControl>
                 <Input placeholder="Annie Mai" {...field} />
               </FormControl>
-              <FormDescription>Please provide your real name.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -98,9 +107,9 @@ export function UpdateProfileForm({values}: UpdateProfileFormProps) {
             </FormItem>
           )}
         />
-        <Button size="sm" variant="inverse" type="submit">
+        <Button disabled={isLoading || !form.formState.isValid || !form.formState.isDirty} size="sm" variant="inverse" type="submit">
           <div className="pr-2">
-            <SaveIcon className="w-4 h-4" />
+            {isLoading ? <LoadingSpinner color="text-gray-600" size="sm" /> : <SaveIcon className="w-4 h-4" />}
           </div>
           <div>Save changes</div>
         </Button>

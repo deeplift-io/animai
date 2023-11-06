@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { Conversation } from "@/src/lib/types";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import ConversationMessage from "./conversation-message";
+import { useGetAuthProfileHook } from "@/src/hooks/useGetAuthProfileHook";
 
 const starterPrompts = [
   {
@@ -48,69 +49,31 @@ export default function Chat({
 }: {
   conversation: Conversation | null;
 }) {
-  const [animals, setAnimals] = useState([]);
-  const [profile, setProfile] = useState(null);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [initialPrompt, setInitialPrompt] = useState("");
   const supabase = createClientComponentClient();
-  const router = useRouter();
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({ initialInput: initialPrompt, body: {conversationId: conversation?.id} });
-  useEffect(() => {
-    const fetchAnimalProfile = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+  const { messages, input, handleInputChange, handleSubmit, isLoading, append } =
+    useChat({
+      initialInput: initialPrompt,
+      body: { conversationId: conversation?.id },
+    });
 
-      if (!user) {
-        router.refresh();
-      };
-
-
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles") //table name
-        .select("*") //columns to select from the database
-        .eq("id", user?.id)
-        .single();
-
-      const { data: animals, error: latestAnimalError } = await supabase
-        .from("animals") //table name
-        .select("*") //columns to select from the database
-        .eq("profile_id", user?.id)
-        .order("created_at", { ascending: false });
-
-      setProfile(profileData);
-      setAnimals(animals);
-    };
-
-    fetchAnimalProfile();
-  }, []);
-
-  // const handleAnimalSelect = (animal) => {
-  //   setSelectedAnimal(animal);
-  //   // complete(animal.seed_prompt);
-  // };
+  const {data: profile} = useGetAuthProfileHook(supabase.auth.getUser()?.id);
+  console.log(profile);
 
   const handleStarterPrompt = (prompt) => {
     const promptContent = `${prompt.title} ${prompt.text}`;
-    handleInputChange({ target: { value: promptContent } });
     setInitialPrompt(prompt.agent_instruction);
-
-    const mockEvent: React.FormEvent<HTMLFormElement> = {
-      nativeEvent: new Event("submit"),
-      preventDefault: () => {},
-      target: {
-        value: promptContent,
-      },
-    } as any;
-
-    setTimeout(() => {}, 500);
-
-    // Call handleSubmit
-    handleSubmit(mockEvent);
+    append({
+      role: "user",
+      content: promptContent,
+    });
   };
 
-  const activeMessages = [...(conversation?.messages || []), ...(messages || [])];
+  const activeMessages = [
+    ...(conversation?.messages || []),
+    ...(messages || []),
+  ];
 
   return (
     <div className="h-full w-full overflow-auto transition-width flex-1">
@@ -129,7 +92,7 @@ export default function Chat({
                 <div className="h-[10rem] md:h-48 flex-shrink-0"></div>
               </div>
             )}
-            {activeMessages.length === 0 && (
+            {activeMessages.length === 0 && !initialPrompt && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -138,7 +101,9 @@ export default function Chat({
                 className="flex flex-col items-center h-full"
               >
                 <div className="flex flex-col items-center justify-center px-2 md:px-0 h-full">
-                  <div className="text-lg md:text-2xl text-slate-700">Welcome back!</div>
+                  <div className="text-lg md:text-2xl text-slate-700">
+                    Welcome back {profile?.name}!
+                  </div>
                   <div className="max-w-md text-center text-gray-400 pb-8">
                     {`If you're worried about your pet, you're in the right place. Describe the issue, and I'll provide guidance.`}
                   </div>
@@ -159,7 +124,9 @@ export default function Chat({
                           transition={{ delay: i * 0.3 }}
                           key={i}
                         >
-                          <GradientCard colors={[ 'bg-gray-50', 'bg-white', 'bg-gray-50' ]}>
+                          <GradientCard
+                            colors={["bg-gray-50", "bg-white", "bg-gray-50"]}
+                          >
                             <div className="font-medium text-sm text-gray-600">
                               {prompt.title}
                             </div>
@@ -201,15 +168,21 @@ export default function Chat({
                   }}
                   placeholder="Ask Animai anything you want about your pet."
                 ></textarea>
-                {isLoading ? <div className="absolute right-0 bottom-0 py-4 px-2"><LoadingSpinner color="text-gray-600" /></div> : <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-0 bottom-0 m-2 group"
-                  isLoading={isLoading}
-                  onClick={(e) => handleSubmit(e)}
-                >
-                  <SendIcon className="text-gray-600 group-hover:text-indigo-500" />
-                </Button>}
+                {isLoading ? (
+                  <div className="absolute right-0 bottom-0 py-4 px-2">
+                    <LoadingSpinner color="text-gray-600" />
+                  </div>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-0 bottom-0 m-2 group"
+                    isLoading={isLoading}
+                    onClick={(e) => handleSubmit(e)}
+                  >
+                    <SendIcon className="text-gray-600 group-hover:text-indigo-500" />
+                  </Button>
+                )}
               </div>
             </div>
           </div>

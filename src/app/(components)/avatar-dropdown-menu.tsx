@@ -12,10 +12,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Menu = [
-    { name: "Your Profile", href: "/settings/profile" },
-    { name: "Account", href: "/settings/account" },
-    { name: "Sign out", href: "/auth/logout" },
-]
+  { name: "Changelog", href: "/changelog", divider: true },
+  { name: "Account Settings", href: "/settings/account" },
+  { name: "Sign out", href: "/auth/logout" },
+];
 
 const AvatarDropdownMenu = ({ session }: { session: Session }) => {
   const { data: profile, isLoading } = useGetAuthProfileHook(session.user.id);
@@ -60,7 +60,7 @@ const Dropdown = ({ profile, children }: { profile: any; children: any }) => {
                 Basic Plan{" "}
                 <Link
                   className="text-xs p-1 border-gray-200 rounded bg-gray-100 ml-2 hover:text-gray-700"
-                  href="/settings/plan"
+                  href="/settings/billing"
                 >
                   Upgrade
                 </Link>
@@ -69,7 +69,7 @@ const Dropdown = ({ profile, children }: { profile: any; children: any }) => {
           </div>
           {Menu.map((item) => (
             <Link href={item.href} key={item.name}>
-                <DropdownItem>{item.name}</DropdownItem>
+              <DropdownItem divider={item.divider}>{item.name}</DropdownItem>
             </Link>
           ))}
         </div>
@@ -78,6 +78,21 @@ const Dropdown = ({ profile, children }: { profile: any; children: any }) => {
   );
 };
 
-const DropdownItem = ({ children }: { children: any }) => {
-  return <div className="mx-1 my-1 py-1 px-3 hover:bg-gray-100 rounded-lg text-sm">{children}</div>;
+const DropdownItem = ({
+  children,
+  divider,
+}: {
+  children: any;
+  divider: boolean | null | undefined;
+}) => {
+  return (
+    <>
+    <div
+      className="mx-1 my-1 py-1 px-3 hover:bg-gray-100 rounded-lg text-sm"
+    >
+      {children}
+    </div>
+    {divider && <div className="w-full border-b border-gray-200"></div>}
+    </>
+  );
 };

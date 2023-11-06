@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 
 export const fetchProfile = async (userId: string | null) => {
-    const res = await fetch(`/api/profile/${userId}`);
+    const res = await fetch(`/api/profiles/${userId}`);
     return res.json();
 };
 
